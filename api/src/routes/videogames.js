@@ -1,48 +1,63 @@
 const express = require('express');
 const router = express.Router()
 const axios = require('axios')
+const { 
+    validateName, 
+    validateDate, 
+    validateRate, 
+    showGames, 
+    addOrFind,
+    search
+} = require('../controlers/Videogame')
+const {Videogame} = require('../db')
+
 require('dotenv').config()
 
 const API_KEY = process.env.MY_API_KEY
 
-router.get('/', (req,res)=>{
-    const { name } = req.query
-    if(name){
-        let nameFixed = name.toLowerCase().split(" ").join("-")
-        let letras = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ","o","p","q","r","s","t","u","v","w","x","y","z"]
-        nameFixed = nameFixed.split("").map(e => {
-            for (let l = 0; l < letras.length; l++) {
-                if (letras[l] === e || e === "-") {
-                    return e
-                }
-            }
-        });
-        const result = nameFixed.join("")
-        console.log(result);
-        // nameFixed
-        try {
+router.get('/', async(req,res)=>{
+    try {
+        const { name } = req.query
+        if(name){
+            let result = validateName(name)
             axios.get(`https://api.rawg.io/api/games/${result}?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
             .then(({data})=>{
                 if (data) {
-                    res.status(200).json(data)
+                    const {name,background_image,description,released,rating} = data
+                    async function find(info) {
+                        let game = await addOrFind(info);
+                        let valuesFound = await search(game)
+                        res.status(200).json(valuesFound)
+                    }
+                    find({name,background_image,description,released,rating})
                 }
-            })
-        } catch (error) {
-            console.log("----->",error);
+            }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
+        } else {   
+            async function games(info) {
+                let games = await showGames();
+                res.status(200).json(games)
+            }
+            games()
         }
-    }else {
-        try {
-            axios(`https://api.rawg.io/api/games?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
-            .then(({data})=>{
-                if (data) {
-                    res.status(200).json(data.results)
-                }
-            })
-        } catch (error) {
-            console.log("----->",error);
-        }
+    }catch (error) {
+        console.log(error + "=====> not found");
     }
 })
+
+//data.results.map((v)=> {
+// })
+    // n.name
+    // v.background_image,
+    // v.description, //no tiene en el global
+    // v.released,
+    // v.rating
+//parentPlatforms:: array de objetos
+    // v.parent_platforms 
+//platforms:: array de objetos
+    // v.platforms
+//genres:: arrya de objetos
+    // v.genres
+
 
 router.get('/:idVideogame', (req,res)=>{
     const {idVideogame}  = req.params
@@ -51,11 +66,16 @@ router.get('/:idVideogame', (req,res)=>{
             axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
             .then(({data})=>{
                 if (data) {
-                    res.status(200).json(data)
+                    const {name,background_image,description,released,rating} = data
+                    async function game(info) {
+                        let game = await addOrFind(info);
+                        res.status(200).json(game.dataValues)
+                    }
+                    game({name,background_image,description,released,rating})
                 }
             })
         }else {
-           res.status(200).json({message:"nesecitas pasarle un id por param"})
+            res.status(200).json({message:"nesecitas pasarle un id por param"})
         }
         
     } catch (error) {
@@ -64,14 +84,23 @@ router.get('/:idVideogame', (req,res)=>{
     
 })
 
-router.post('/', (req,res)=>{
-    const newGame = req.body
-    //recordar desconprimirlo
-    if(newGame){
-        res.status(200).json({message:`esta ruta debe crear un nuego juego en la base de datos y agregandole el genero indicado con la info que pasen por body: ${newGame} `})
-    }else{
-        res.status(200).json({message:`necesitas pasarle info por el body para poder crear el juego`})
-    }  
+router.post('/', async(req,res)=>{
+    const {name,image,description,releaseDate,rating} = req.body
+
+    // if( name && image && description && releaseDate && rating ){
+    //     let date = validateDate(releaseDate)
+    //     let rate = validateRate(rating)
+    //     let newGame = await Videogame.create({
+    //         name,
+    //         image,
+    //         description,
+    //         date,
+    //         rate
+    //     })
+    //     res.status(200).json(newGame)
+    // }else{
+    //     res.status(200).json({message:`necesitas pasar todos los datos requeridos`, datos:"name,image,description,releaseDate,rating"})
+    // }  
 })
 
 
