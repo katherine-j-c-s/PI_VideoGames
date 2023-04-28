@@ -1,5 +1,6 @@
 const axios = require('axios')
 const {Videogame} = require('../db')
+const {Genre} = require('../db')
 const {Op} = require('sequelize')
 
 require('dotenv').config()
@@ -75,45 +76,49 @@ async function showGames() {
     return allValues
 }
 
+function save(arr){
+    console.log(arr);
+    // arr.map(v=>{
+    //     let game ={
+    //         name: v.name,
+    //         image: v.image,
+    //         description: v.description,
+    //         releaseDate: v.releaseDate,
+    //         rating: v.rating,
+    //     }
+
+    //     let genres= v.genres.map(g=> g.name)
+
+    //     createGame(game)
+    //     createGenre(genres)
+    // })
+    // allVideoGames.push(obj)
+    // if (allVideoGames.length === 19) {
+    //     let videojuego = await 
+    //     console.log(videojuego.dataValues);
+    // }
+}
+async function createGame(data) {
+    
+}
+async function createGenre(data) {
+    let bringGenres = await Genre.findAll()
+    let genres = bringGenres.map(g=>g.dataValues)
+    console.log(data);
+}
 module.exports = {
     validateName,
     validateRate,
     validateDate,
     addOrFind,
     showGames,
-    search
+    search,
+    save,
 }
 
 //////USE ESTAS FUNCIONES PARA GUARDAR TODOS LOS JUEGOS A LA DB(no se necesitan mas)/////////////////////////////////////
 
-// function saveGames(juegos) {
-//     let allGames = juegos.map((v)=>{
-//         let result = validate(v);
-//         axios.get(`https://api.rawg.io/api/games/${result}?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
-//         .then(({data})=>{
-//             if (data) {
-//                 let date = data.released.split("-").join("")
-//                 let rate = data.rating.toString().split(".").join("")
-//                 let videojuego = {
-//                     name: data.name,
-//                     image: data.background_image,
-//                     description: data.description,
-//                     releaseDate: Number(date),
-//                     rating: Number(rate)
-//                 }
-//                 save(videojuego)
-//             }
-//         })
-//     })
-// }
-// let allVideoGames = []
-// async function save(obj){
-//     allVideoGames.push(obj)
-//     if (allVideoGames.length === 19) {
-//         let videojuego = await Videogame.create(allVideoGames[0])
-//         console.log(videojuego.dataValues);
-//     }
-// }
+
 
 //////// AGREGANDO EN EL SERVIDOR ESTOS COMENDOS PARA QUE ME PASARA TODOS LOS NOMBRES
 

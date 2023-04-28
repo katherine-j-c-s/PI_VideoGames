@@ -7,7 +7,8 @@ const {
     validateRate, 
     showGames, 
     addOrFind,
-    search
+    search,
+    save
 } = require('../controlers/Videogame')
 const {Videogame} = require('../db')
 
@@ -32,12 +33,29 @@ router.get('/', async(req,res)=>{
                     find({name,background_image,description,released,rating})
                 }
             }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
-        } else {   
-            async function games(info) {
-                let games = await showGames();
-                res.status(200).json(games)
-            }
-            games()
+        } else {
+            axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
+            .then(({data})=>{
+                if (data) {
+                    let games = data.results.map(v=>{
+                        let videojuego = {
+                            name: v.name,
+                            image: v.background_image,
+                            description: v.description,
+                            releaseDate: validateDate(v.released),
+                            rating: validateRate(v.rating),
+                            genres: v.genres
+                        }
+                        return videojuego
+                    })
+                    save(games)
+                }
+            }).catch((error)=> console.log("not found: ", error))
+            // async function games(info) {
+            //     let games = await showGames();
+            //     res.status(200).json(games)
+            // }
+            // games()
         }
     }catch (error) {
         console.log(error + "=====> not found");
