@@ -1,20 +1,23 @@
 const {Genre} = require('../db')
 
-module.exports = {
+function addAllGenres(genres) {
+    let allGenres = genres.map((g)=>{
+        let genre = {
+            id: g.id,
+            name: g.name,
+            image: g.image_background,
+            games_count: g.games_count
+        }
+        addGenre(genre)
+    })
+}
+async function addGenre(obj) {
+    let genre = await Genre.create(obj)
+    return genre.dataValues
+}
+
+module.exports = {addAllGenres,
 }
 //////////////FUNCIONES CON LAS CUALES CREE LA DB DE GENRES
-// function addAllGenres(genres) {
-//     let allGenres = genres.map((g)=>{
-//         let genre = {
-//             name: g.name,
-//             image: g.image_background,
-//             games_count: g.games_count
-//         }
-//         addGenre(genre)
-//     })
-// }
-// async function addGenre(obj) {
-//     let genre = await Genre.create(obj)
-//     return genre.dataValues
-// }
+
 //////////////////////////////////////////////////

@@ -1,6 +1,5 @@
 const axios = require('axios')
-const {Videogame} = require('../db')
-const {Genre} = require('../db')
+const {Videogame,ParentPlatform,Genre} = require('../db')
 const {Op} = require('sequelize')
 
 require('dotenv').config()
@@ -77,34 +76,36 @@ async function showGames() {
 }
 
 function save(arr){
-    console.log(arr);
-    // arr.map(v=>{
-    //     let game ={
-    //         name: v.name,
-    //         image: v.image,
-    //         description: v.description,
-    //         releaseDate: v.releaseDate,
-    //         rating: v.rating,
-    //     }
-
-    //     let genres= v.genres.map(g=> g.name)
-
-    //     createGame(game)
-    //     createGenre(genres)
-    // })
-    // allVideoGames.push(obj)
-    // if (allVideoGames.length === 19) {
-    //     let videojuego = await 
-    //     console.log(videojuego.dataValues);
-    // }
+    arr.map(v=>{
+        let platforms = v.platforms.map(p => p.platform.name)
+        let genres= v.genres.map(g=> g.id)
+        let game ={
+            name: v.name,
+            image: v.image,
+            description: v.description,
+            releaseDate: v.releaseDate,
+            rating: v.rating,
+        }
+        createGame(game,genres,platforms)
+    })
 }
-async function createGame(data) {
-    
-}
-async function createGenre(data) {
-    let bringGenres = await Genre.findAll()
-    let genres = bringGenres.map(g=>g.dataValues)
-    console.log(data);
+let plataformas = []
+async function createGame(gameInf,genresid,platformsInf) {
+    let game = await Videogame.create(gameInf)
+    for (let e = 0; e < platformsInf.length; e++) {
+        let add = plataformas.find( name => name === platformsInf[e])
+        if (!add) {
+            plataformas.push(platformsInf[e])
+            await ParentPlatform.create({name:platformsInf[e]})
+        }
+        let platform = await ParentPlatform.findOne({
+            where:{
+                name: platformsInf[e]
+            }
+        })
+        await game.addPlatform(platform.dataValues.id)
+    }
+    await game.addGenre(genresid) 
 }
 module.exports = {
     validateName,

@@ -34,17 +34,19 @@ router.get('/', async(req,res)=>{
                 }
             }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
         } else {
-            axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
+            axios.get(`https://api.rawg.io/api/games?key=f8ed5decf7b547b193d7895b9c21716c`)
             .then(({data})=>{
                 if (data) {
-                    let games = data.results.map(v=>{
+                    let games = data.results.map((v, i)=>{
                         let videojuego = {
+                            id: i,
                             name: v.name,
                             image: v.background_image,
                             description: v.description,
                             releaseDate: validateDate(v.released),
                             rating: validateRate(v.rating),
-                            genres: v.genres
+                            genres: v.genres,
+                            platforms: v.parent_platforms
                         }
                         return videojuego
                     })
