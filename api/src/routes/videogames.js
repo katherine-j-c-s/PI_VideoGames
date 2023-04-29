@@ -5,9 +5,7 @@ const {
     validateName, 
     validateDate, 
     validateRate, 
-    showGames, 
     addOrFind,
-    search,
     save
 } = require('../controlers/Videogame')
 const {Videogame} = require('../db')
@@ -18,23 +16,9 @@ const API_KEY = process.env.MY_API_KEY
 
 router.get('/', async(req,res)=>{
     try {
-        const { name } = req.query
-        if(name){
-            let result = validateName(name)
-            axios.get(`https://api.rawg.io/api/games/${result}?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
-            .then(({data})=>{
-                if (data) {
-                    const {name,background_image,description,released,rating} = data
-                    async function find(info) {
-                        let game = await addOrFind(info);
-                        let valuesFound = await search(game)
-                        res.status(200).json(valuesFound)
-                    }
-                    find({name,background_image,description,released,rating})
-                }
-            }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
-        } else {
-            axios.get(`https://api.rawg.io/api/games?key=f8ed5decf7b547b193d7895b9c21716c`)
+        const { search } = req.query
+        if(search){
+            axios.get(`https://api.rawg.io/api/games?search=${search}&key=${API_KEY}`)
             .then(({data})=>{
                 if (data) {
                     let games = data.results.map((v, i)=>{
@@ -50,14 +34,21 @@ router.get('/', async(req,res)=>{
                         }
                         return videojuego
                     })
-                    save(games)
+                    // save(games)
+                    res.status(200).json(games)
+                    // const {name,background_image,description,released,rating} = data
+                    // async function find(info) {
+                    //     let game = await addOrFind(info);
+                    //     let valuesFound = await search(game)
+                    //     res.status(200).json(valuesFound)
+                    // }
+                    // find({name,background_image,description,released,rating})
                 }
-            }).catch((error)=> console.log("not found: ", error))
-            // async function games(info) {
-            //     let games = await showGames();
-            //     res.status(200).json(games)
-            // }
-            // games()
+            }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
+        } else {
+            const data = await Videogame.findAll()
+            let allGames = data.map(v=>v.dataValues)
+            res.status(200).json(allGames)
         }
     }catch (error) {
         console.log(error + "=====> not found");

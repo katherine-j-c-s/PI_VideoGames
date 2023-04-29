@@ -27,54 +27,6 @@ function validateRate(rate){
     const result = rate.toString().split(".").join("")
     return Number(result)
 }
-async function search(data) {
-    let game = data.dataValues
-    let letram = game.name[0].toLowerCase()
-    let letraM = game.name[0].toUpperCase()
-
-    const gamesm = await Videogame.findAll({
-            where: {
-                name : {
-                    [Op.like]: `${letram}%`
-                }
-            }
-        })
-        const gamesM = await Videogame.findAll({
-            where: {
-                name : {
-                    [Op.like]: `${letraM}%`
-                }
-            }
-        })
-    let allValues = [...gamesm, ...gamesM]
-    return allValues
-}
-
-async function addOrFind(obj) {
-    const {name,background_image,description,released,rating} = obj
-    let date = validateDate(released)
-    let rate = validateRate(rating)
-
-   const [ game, created ] = await Videogame.findOrCreate({
-        where: { name },
-        defaults: {
-            image: background_image,
-            description: description,
-            releaseDate: date,
-            rating: rate
-        }
-    })
-    return game
-}
-
-async function showGames() {
-    const games = await Videogame.findAll()
-    let allValues = games.map(v=> v.dataValues)
-    let names = allValues.map(v=>v.name)
-    console.log(names);
-    return allValues
-}
-
 function save(arr){
     arr.map(v=>{
         let platforms = v.platforms.map(p => p.platform.name)
@@ -103,34 +55,62 @@ async function createGame(gameInf,genresid,platformsInf) {
                 name: platformsInf[e]
             }
         })
-        await game.addPlatform(platform.dataValues.id)
+        await game.addParentPlatform(platform.dataValues.id)
     }
     await game.addGenre(genresid) 
 }
+
+async function addOrFind(obj) {
+    const {name,background_image,description,released,rating} = obj
+    let date = validateDate(released)
+    let rate = validateRate(rating)
+
+   const [ game, created ] = await Videogame.findOrCreate({
+        where: { name },
+        defaults: {
+            image: background_image,
+            description: description,
+            releaseDate: date,
+            rating: rate
+        }
+    })
+    return game
+}
+
 module.exports = {
     validateName,
     validateRate,
     validateDate,
     addOrFind,
-    showGames,
-    search,
     save,
 }
 
-//////USE ESTAS FUNCIONES PARA GUARDAR TODOS LOS JUEGOS A LA DB(no se necesitan mas)/////////////////////////////////////
+//USE ESTAS FUNCIONES PARA :
+//GUARDAR TODOS LOS JUEGOS, LAS PLATAFORMAS Y RELACIONAR LOS GENEROS A LA DB(no se necesitan mas)/////////////////////////
 
 
 
-//////// AGREGANDO EN EL SERVIDOR ESTOS COMENDOS PARA QUE ME PASARA TODOS LOS NOMBRES
+//////// AGREGE EN EL SERVIDOR ESTOS COMANDOS PARA QUE ME PASARA EL ARRAY CON TODA LA INFO NECESITADA//////////////
 
-// axios(`https://api.rawg.io/api/games?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
+// axios.get(`https://api.rawg.io/api/games?key=f8ed5decf7b547b193d7895b9c21716c`)
 // .then(({data})=>{
 //     if (data) {
-//         // let allGames = data.results.map(v=> v.name )
-//         // let gamesWorking = allGames.filter(v=> v !== "The Legend of Zelda: Link's Awakening (2019)")
-//         // saveAllGames(gamesWorking) 
+//         let games = data.results.map((v, i)=>{
+//             let videojuego = {
+//                 id: i,
+//                 name: v.name,
+//                 image: v.background_image,
+//                 description: v.description,
+//                 releaseDate: validateDate(v.released),
+//                 rating: validateRate(v.rating),
+//                 genres: v.genres,
+//                 platforms: v.parent_platforms
+//             }
+//             return videojuego
+//         })
+//         save(games)
 //     }
-// })
+// }).catch((error)=> console.log("not found: ", error))
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
