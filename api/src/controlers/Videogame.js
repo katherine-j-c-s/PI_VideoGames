@@ -27,11 +27,47 @@ function validateRate(rate){
     const result = rate.toString().split(".").join("")
     return Number(result)
 }
+async function AddOrFindByID(videojuego) {
+    let [game,created] = await Videogame.findOrCreate({
+        where:{
+            id: videojuego.id
+        },defaults: {
+            name: videojuego.name,
+            image: videojuego.image,
+            description: videojuego.description,
+            releaseDate: videojuego.releaseDate, 
+            rating: videojuego.rating,
+        }
+    });
+    if (created) {
+        console.log("new added");
+        let genres= videojuego.genres.map(g=> g.id)
+        console.log(genres);
+        for (let e = 0; e < genres.length; e++) {
+            await game.addGenre(genres)
+        }
+
+        let platforms = videojuego.platforms.map(p => p.platform.name)
+        console.log(platforms);
+        for (let e = 0; e < platforms.length; e++) {
+            let [platformAdded,created] = await ParentPlatform.findOrCreate({where:{name:platforms[e]}})
+            await game.addParentPlatform(platformAdded.dataValues.id)
+        }
+    }
+    const addDescription = await Videogame.update({
+        description: videojuego.description
+    },{
+        where:{
+            id: videojuego.id
+        }
+    })
+}
 function save(arr){
     arr.map(v=>{
         let platforms = v.platforms.map(p => p.platform.name)
         let genres= v.genres.map(g=> g.id)
         let game ={
+            id: v.id,
             name: v.name,
             image: v.image,
             description: v.description,
@@ -41,6 +77,7 @@ function save(arr){
         createGame(game,genres,platforms)
     })
 }
+
 let plataformas = []
 async function createGame(gameInf,genresid,platformsInf) {
     let game = await Videogame.create(gameInf)
@@ -52,7 +89,7 @@ async function createGame(gameInf,genresid,platformsInf) {
         }
         let platform = await ParentPlatform.findOne({
             where:{
-                name: platformsInf[e]
+                name: platformsInf[e] 
             }
         })
         await game.addParentPlatform(platform.dataValues.id)
@@ -60,29 +97,12 @@ async function createGame(gameInf,genresid,platformsInf) {
     await game.addGenre(genresid) 
 }
 
-async function addOrFind(obj) {
-    const {name,background_image,description,released,rating} = obj
-    let date = validateDate(released)
-    let rate = validateRate(rating)
-
-   const [ game, created ] = await Videogame.findOrCreate({
-        where: { name },
-        defaults: {
-            image: background_image,
-            description: description,
-            releaseDate: date,
-            rating: rate
-        }
-    })
-    return game
-}
-
 module.exports = {
     validateName,
     validateRate,
     validateDate,
-    addOrFind,
-    save,
+    AddOrFindByID,
+    save
 }
 
 //USE ESTAS FUNCIONES PARA :
@@ -92,25 +112,7 @@ module.exports = {
 
 //////// AGREGE EN EL SERVIDOR ESTOS COMANDOS PARA QUE ME PASARA EL ARRAY CON TODA LA INFO NECESITADA//////////////
 
-// axios.get(`https://api.rawg.io/api/games?key=f8ed5decf7b547b193d7895b9c21716c`)
-// .then(({data})=>{
-//     if (data) {
-//         let games = data.results.map((v, i)=>{
-//             let videojuego = {
-//                 id: i,
-//                 name: v.name,
-//                 image: v.background_image,
-//                 description: v.description,
-//                 releaseDate: validateDate(v.released),
-//                 rating: validateRate(v.rating),
-//                 genres: v.genres,
-//                 platforms: v.parent_platforms
-//             }
-//             return videojuego
-//         })
-//         save(games)
-//     }
-// }).catch((error)=> console.log("not found: ", error))
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router()
 const axios = require('axios')
 const { 
-    validateName, 
+    validateName,
     validateDate, 
     validateRate, 
-    addOrFind,
+    AddOrFindByID,
     save
 } = require('../controlers/Videogame')
-const {Videogame} = require('../db')
+const {Videogame,ParentPlatform,Genre,Sequelize} = require('../db')
 
 require('dotenv').config()
 
@@ -21,9 +21,9 @@ router.get('/', async(req,res)=>{
             axios.get(`https://api.rawg.io/api/games?search=${search}&key=${API_KEY}`)
             .then(({data})=>{
                 if (data) {
-                    let games = data.results.map((v, i)=>{
+                    let games = data.results.map((v)=>{
                         let videojuego = {
-                            id: i,
+                            id: v.id,
                             name: v.name,
                             image: v.background_image,
                             description: v.description,
@@ -34,19 +34,32 @@ router.get('/', async(req,res)=>{
                         }
                         return videojuego
                     })
-                    // save(games)
                     res.status(200).json(games)
-                    // const {name,background_image,description,released,rating} = data
-                    // async function find(info) {
-                    //     let game = await addOrFind(info);
-                    //     let valuesFound = await search(game)
-                    //     res.status(200).json(valuesFound)
-                    // }
-                    // find({name,background_image,description,released,rating})
                 }
             }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
         } else {
-            const data = await Videogame.findAll()
+            // axios.get(`https://api.rawg.io/api/games?key=f8ed5decf7b547b193d7895b9c21716c`)
+            // .then(({data})=>{
+            //     if (data) {
+            //         let games = data.results.map((v)=>{
+            //             let videojuego = {
+            //                 id: v.id,
+            //                 name: v.name,
+            //                 image: v.background_image,
+            //                 description: v.description,
+            //                 releaseDate: validateDate(v.released),
+            //                 rating: validateRate(v.rating),
+            //                 genres: v.genres,
+            //                 platforms: v.parent_platforms
+            //             }
+            //             return videojuego
+            //         })
+            //         save(games)
+            //     }
+            // }).catch((error)=> console.log("not found: ", error))
+            const data = await Videogame.findAll({
+                include: [{model: ParentPlatform},{model: Genre}]
+            })
             let allGames = data.map(v=>v.dataValues)
             res.status(200).json(allGames)
         }
@@ -55,21 +68,6 @@ router.get('/', async(req,res)=>{
     }
 })
 
-//data.results.map((v)=> {
-// })
-    // n.name
-    // v.background_image,
-    // v.description, //no tiene en el global
-    // v.released,
-    // v.rating
-//parentPlatforms:: array de objetos
-    // v.parent_platforms 
-//platforms:: array de objetos
-    // v.platforms
-//genres:: arrya de objetos
-    // v.genres
-
-
 router.get('/:idVideogame', (req,res)=>{
     const {idVideogame}  = req.params
     try {
@@ -77,12 +75,29 @@ router.get('/:idVideogame', (req,res)=>{
             axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
             .then(({data})=>{
                 if (data) {
-                    const {name,background_image,description,released,rating} = data
-                    async function game(info) {
-                        let game = await addOrFind(info);
-                        res.status(200).json(game.dataValues)
+                    let videojuego = {
+                        id: data.id,
+                        name: data.name,
+                        image: data.background_image,
+                        description: data.description,
+                        releaseDate: validateDate(data.released),
+                        rating: validateRate(data.rating),
+                        genres: data.genres,
+                        platforms: data.parent_platforms
                     }
-                    game({name,background_image,description,released,rating})
+                    
+                    async function showDetails(id) {
+                        await AddOrFindByID(videojuego)
+                        let game = await Videogame.findOne({
+                            where:{id},
+                            include: [
+                                {model: Genre},
+                                {model: ParentPlatform}
+                            ]
+                        })
+                        res.status(200).json(game)
+                    }
+                    showDetails(videojuego.id)
                 }
             })
         }else {
@@ -94,25 +109,43 @@ router.get('/:idVideogame', (req,res)=>{
     }
     
 })
-
 router.post('/', async(req,res)=>{
-    const {name,image,description,releaseDate,rating} = req.body
-
-    // if( name && image && description && releaseDate && rating ){
-    //     let date = validateDate(releaseDate)
-    //     let rate = validateRate(rating)
-    //     let newGame = await Videogame.create({
-    //         name,
-    //         image,
-    //         description,
-    //         date,
-    //         rate
-    //     })
-    //     res.status(200).json(newGame)
-    // }else{
-    //     res.status(200).json({message:`necesitas pasar todos los datos requeridos`, datos:"name,image,description,releaseDate,rating"})
-    // }  
+    const {name,image,description,releaseDate,rating,genres,platforms} = req.body
+    let max = await Videogame.findAll({
+        attributes: [Sequelize.fn('max',Sequelize.col('id'))],
+        raw: true,
+    })
+    let videojuego = {
+        id: ++max[0].max,
+        name,
+        image,
+        description,
+        releaseDate: validateDate(releaseDate),
+        rating: validateRate(rating),
+        genres,
+        platforms
+    }
+    await AddOrFindByID(videojuego)
+    let game = await Videogame.findOne({
+        where:{id:videojuego.id},
+        include: [
+            {model: Genre},
+            {model: ParentPlatform}
+        ]
+    })
+    res.status(200).json(game)
 })
 
-
 module.exports = router;
+//data.results.map((v)=> {
+// })
+    // n.name
+    // v.background_image,
+    // v.description, //no tiene en el global
+    // v.released,
+    // v.rating
+//parentPlatforms:: array de objetos
+    // v.parent_platforms 
+//genres:: arrya de objetos
+    // v.genres
+
