@@ -1,30 +1,36 @@
 import React from 'react'
 import { useEffect ,useState} from 'react'
-import axios from 'axios'
-import Card from '../../Card/Card'
 
-export default function Platforms() {
-  let [platforms,setplatforms] = useState()
-  useEffect(()=>{
-    axios.get('http://localhost:3001/platforms')
-    .then(({data})=>{
-      setplatforms(data)
-    })
-  },[])
+import {FaLaptop ,FaAppStoreIos,FaPlaystation,FaXbox} from 'react-icons/fa'
+import {BsAndroid2, BsApple,BsNintendoSwitch} from 'react-icons/bs'
+import {TbWorld} from 'react-icons/tb'
+import {GrArchlinux} from 'react-icons/gr'
+
+export default function Platforms({platforms}) {
+  let [allPlatforms,setAllPlatforms] = useState([
+    <FaLaptop/>,
+    <FaPlaystation/>,
+    <FaXbox/>,
+    <BsApple/>,
+    <BsAndroid2/>,
+    <GrArchlinux/>,
+    <BsNintendoSwitch/>,
+    <FaAppStoreIos/>,
+    <TbWorld/>
+  ])
   return (
     <div>
-        {platforms && 
-          platforms.map((p,i)=>{
-            return(
-              <Card
-                key={i}
-                id={p.id}
-                name={p.name}
-                platforms={p.name}
-              />
-            )
+      <ul>
+        {platforms &&
+          platforms.map(p=>{
+              let icon = allPlatforms[p.id - 1]
+              return(
+              <li>{icon} {p.name} </li>
+              )
           })
         }
+      </ul>
+        
     </div>
   )
 }

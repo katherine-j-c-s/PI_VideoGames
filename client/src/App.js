@@ -2,7 +2,13 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 import { useEffect ,useState} from 'react';
-import axios from 'axios'
+import {useDispatch,useSelector} from 'react-redux'
+import {
+  getGames, 
+  getGenres, 
+  getPlatforms,
+  searchGame
+} from './redux/actions/actions'
 
 import Landing from './components/Landing/Landing';
 import Home from './components/Home/Home';
@@ -11,34 +17,49 @@ import SideBar from './components/SideBar/SideBar';
 import SearchBar from './components/SearchBar/SearchBar';
 import Genders from './components/SideBar/Genders/Genders';
 import Platforms from './components/SideBar/Platforms/Platforms';
-import Rating from './components/SideBar/Rating/Rating';
 
 
 function App() {
   let currentLocation = useLocation()
-  let [videogames,setVideoGames]= useState()
+
+  let [genresL, setGenresL] = useState()
+  let [platformsL, setplatformsL] = useState()
+
+  const dispatch = useDispatch();
+  const { genres, platforms, gamesFound} = useSelector((state) => state);
+
   useEffect(()=>{
-    axios.get('http://localhost:3001/videogames')
-    .then(({data})=>{
-      setVideoGames(data)
-    })
+    dispatch(getGames())
+
+    dispatch(getGenres())
+    setGenresL(genres)
+
+    dispatch(getPlatforms())
+    setplatformsL(platforms)
   },[])
+
+  function onSearch(name){
+    dispatch(searchGame(name))
+  }
+
   return (
     <div>
       <nav>
         { currentLocation.pathname === "/" ? null : <Nav/>}
       </nav>
       <aside>
-        { currentLocation.pathname === "/" ? null : <SideBar/>}
+        { currentLocation.pathname === "/" ? null : <SideBar platforms={platformsL} />}
       </aside>
-      <Routes>
-        <Route path='/' element={<Landing/>}/>
-        <Route path='/home' element={<Home videogames={videogames}/>}/>
-        <Route path='/search' element={<SearchBar/>}/>
-        <Route path='/genres' element={<Genders/>}/>
-        <Route path='/platforms' element={<Platforms/>}/>
-        <Route path='/rating' element={<Rating/>}/>
-      </Routes>
+      <div>
+        <Routes>
+          <Route path='/' element={<Landing/>}/>
+          <Route path='/home' element={<Home/>}/>
+          <Route path='/search' element={<SearchBar onSearch={onSearch} />}/>
+          <Route path='/genres' element={<Genders genres={genresL}/>}/>
+          <Route path='/platforms' element={<Platforms/>}/>
+        </Routes>
+      </div>
+      
     </div>
   )
 }

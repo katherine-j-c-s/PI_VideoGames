@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import {BsArrowDownRightCircleFill,BsArrowDownRightCircle} from 'react-icons/bs'
-export default function CardS({id,name,image,games_count}) {
+export default function CardsG({id,name,image,games_count}) {
     let [description,setDescription] = useState()
     let [show,setShow] = useState(false)
     useEffect(()=>{

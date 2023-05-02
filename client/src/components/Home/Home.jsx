@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
-
+import React from 'react'
+import { useSelector } from 'react-redux'
 import Cards from '../Cards/Cards'
-import axios from 'axios'
 
-export default function Home({videogames}) {
+
+export default function Home() {
+  const { games } = useSelector((state) => state);
   return (
     <div>
         <h1>this is home</h1>
-        <Cards videogames={videogames}></Cards>
+        <Cards games={games}></Cards>
     </div>
   )
 }

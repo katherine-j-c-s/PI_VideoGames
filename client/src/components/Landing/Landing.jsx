@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Landing() {
+export default function Landing({videogames,genres}) {
   return (
     <div>
       <h1>Welcome this is my VideoGame Page</h1>

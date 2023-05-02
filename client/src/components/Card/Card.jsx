@@ -7,15 +7,15 @@ import {GrArchlinux} from 'react-icons/gr'
 
 export default function Card({name,image,genres,platforms}) {
     let [allPlatforms,setAllPlatforms] = useState([
-        {name:"PC", icon: <FaLaptop/>},
-        {name:"PlayStation", icon: <FaPlaystation/>},
-        {name:"Xbox", icon: <FaXbox/>},
-        {name:"Apple", icon: <BsApple/>},
-        {name:"Android", icon: <BsAndroid2/>},
-        {name:"Linux", icon: <GrArchlinux/>},
-        {name:"Nintendo", icon: <BsNintendoSwitch/>},
-        {name:"iOS", icon: <FaAppStoreIos/>},
-        {name:"Web", icon: <TbWorld/>}
+        <FaLaptop/>,
+        <FaPlaystation/>,
+        <FaXbox/>,
+        <BsApple/>,
+        <BsAndroid2/>,
+        <GrArchlinux/>,
+        <BsNintendoSwitch/>,
+        <FaAppStoreIos/>,
+        <TbWorld/>
     ])
     return (
       <div>
@@ -33,13 +33,13 @@ export default function Card({name,image,genres,platforms}) {
             <ul>
                 {platforms &&
                 platforms.map(p=>{
-                    let platform = allPlatforms.find(pf => pf.name === p.name)
-                    
-                    
+                   let icon = allPlatforms[p.id - 1]
+                   return(
+                    <li>{icon}</li>
+                   )
                 })
             }
           </ul>
-          <p></p>
       </div>
     )
 }

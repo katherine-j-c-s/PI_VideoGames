@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Platforms from './Platforms/Platforms'
 
-export default function SideBar() {
+
+export default function SideBar({platforms}) {
   let [showP,setShowP] = useState(false)
+  
   function showPlatforms() {
     if (showP) {
       setShowP(false)
-      console.log(showP);
     }
     if (!showP) {
       setShowP(true)
-      console.log(showP);
     }
   }
   return (
@@ -19,13 +19,10 @@ export default function SideBar() {
         <Link to={'/genres'}>
             <p>Gender</p>
         </Link>
-        <Link to={'/rating'}>
-            <p>Rating</p>
-        </Link>
-        <div>
+        <div onClick={showPlatforms}>
           <p >Platforms</p>
-          {/* {setShowP ? <Platforms></Platforms> : null} */}
         </div>
+        {showP === true ? <Platforms platforms={platforms}/> : null}
     </div>
   )
 }
