@@ -6,7 +6,8 @@ import {
     SEARCH_GAME,
     ORDER_RANK,
     ORDER_ALFAB,
-    RESET,
+    RESETGAMES,
+    RESETGENRES,
     NEXT_PAGE,
     PREV_PAGE,
     HANDLE_NUMBER
@@ -114,19 +115,23 @@ import {
       payload: [order,type],
     };
   }
-  export function orderByAlfb(order,type) {
+  export function orderByAlfb() {
     // A: ascendente o D: descendente
     // el type es lo que se va a ordenar como el genres, games
     return {
       type: ORDER_ALFAB,
-      payload: [order,type],
     };
   }
-  export function reset(type) {
+  export function resetGames() {
     // el type es lo que se va a ordenar como el genres, games
     return {
-      type: RESET,
-      payload:type
+      type: RESETGAMES,
+    };
+  }
+  export function resetGenres() {
+    // el type es lo que se va a ordenar como el genres, games
+    return {
+      type: RESETGENRES,
     };
   }
   /*

@@ -25,6 +25,7 @@ export default function SearchBar({ onSearch }) {
   }
   return (
     <div>
+      {/* {console.log(games)} */}
       <input onChange={handleChange} type="search" name="search" value={name} />
       {search === true ? 
         <button onClick={submit}>Search</button>

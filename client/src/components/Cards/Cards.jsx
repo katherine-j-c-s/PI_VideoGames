@@ -4,19 +4,18 @@ import Paginate from '../Paginate/Paginate'
 
 import { useSelector } from 'react-redux'
 
-export default function Cards({games}) {
+export default function Cards({games,numPage}) {
   
-  const {numPage} = useSelector((state)=>state)
-  
-  let desde = (numPage - 1) * 4;
-  let hasta = numPage * 4;
+  let desde = (numPage - 1) * 15;
+  let hasta = numPage * 15;
 
-  let cantPages = Math.floor(games.length / 4);
+  let cantPages = Math.floor(games.length / 8);
 
   let viewGames = games?.slice(desde, hasta);
 
   return (
     <div>
+      {/* {console.log(games)} */}
         {viewGames &&
           viewGames.map((v)=>{
             return(
@@ -27,7 +26,6 @@ export default function Cards({games}) {
                 image={v.image}
                 genres={v.Genres}
                 platforms={v.ParentPlatforms}
-                description={v.description}
               />
             )
           })

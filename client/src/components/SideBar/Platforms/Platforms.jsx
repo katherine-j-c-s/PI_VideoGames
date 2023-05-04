@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect ,useState} from 'react'
+import { useState} from 'react'
 
 import {FaLaptop ,FaAppStoreIos,FaPlaystation,FaXbox} from 'react-icons/fa'
 import {BsAndroid2, BsApple,BsNintendoSwitch} from 'react-icons/bs'
@@ -30,7 +30,6 @@ export default function Platforms({platforms}) {
           })
         }
       </ul>
-        
     </div>
   )
 }

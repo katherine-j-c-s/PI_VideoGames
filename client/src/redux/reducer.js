@@ -6,7 +6,8 @@ import {
     SEARCH_GAME,
     ORDER_RANK,
     ORDER_ALFAB,
-    RESET,
+    RESETGAMES,
+    RESETGENRES,
     NEXT_PAGE,
     PREV_PAGE,
     HANDLE_NUMBER
@@ -15,7 +16,6 @@ import {
   const initialState = {
     newGames: [],
     numPage: 1,
-    numPage: 2,
     genres: [],
     games: [],
     gamesFound: [],
@@ -53,96 +53,72 @@ import {
         };
       case GET_GAMES:
         return {
-            ...state,
-            games: payload,
-            gamesOrigin: payload
+          ...state,
+          games: payload,
+          gamesOrigin: payload
         };
       case GET_GENRES:
         return {
-            ...state,
-            genres: payload,
-            genresOrigin: payload
+          ...state,
+          genres: payload,
+          genresOrigin: payload
         };
       case GET_PLATFORMS:
         return {
-            ...state,
-            platforms: payload,
+          ...state,
+          platforms: payload,
         };
-      case RESET:
-        if (payload ==="games") {
-            return {
-                ...state,
-                games: [...state.gamesOrigin],
-            };
-        }
-        if (payload ==="genres") {
-            return {
-                ...state,
-                genres: [...state.genresOrigin],
-            };
-        }
+      case RESETGAMES:
+        let altern = [...state.gamesOrigin]
+        return {
+          ...state,
+          games: altern
+        };
+      case RESETGENRES:
+        let alternG = state.genresOrigin
+        return {
+          ...state,
+          genres: alternG,
+        };
       case ORDER_RANK:
         if (payload[1] ==="games") {
-           const newOrder = state.games.sort((a, b) => {
-                if (a.rating > b.rating) {
-                    return "Ascendente" === payload[0] ? 1 : -1;
-                }
-                if (a.rating < b.rating) {
-                    return "Descendente" === payload[0] ? 1 : -1;
-                }
-                return 0;
-            });
-            return {
-                ...state,
-                games: newOrder,
-              };
+          const newOrder = state.games.sort((a, b) => {
+            if (a.rating > b.rating) {
+              return "Lowest" === payload[0] ? 1 : -1;
+            }
+            if (a.rating < b.rating) {
+              return "Highest" === payload[0] ? 1 : -1;
+            }
+            return 0;
+          });
+          return {
+            ...state,
+            games: newOrder,
+          };
         }
         if (payload[1] ==="genres") {
-            const newOrder = state.genres.sort((a, b) => {
-                if (a.rating > b.rating) {
-                    return "Ascendente" === payload[0] ? 1 : -1;
-                }
-                if (a.rating < b.rating) {
-                    return "Descendente" === payload[0] ? 1 : -1;
-                }
-                return 0;
-            });
-            return {
-                ...state,
-                genres: newOrder,
-            };
+          const newOrder = state.genres.sort((a, b) => {
+            if (a.rating > b.rating) {
+              return "Ascendente" === payload[0] ? 1 : -1;
+            }
+            if (a.rating < b.rating) {
+              return "Descendente" === payload[0] ? 1 : -1;
+            }
+            return 0;
+          });
+          return {
+            ...state,
+            genres: newOrder,
+          };
         }
+        break
       case ORDER_ALFAB:
-        if (payload[1] ==="games") {
-           const newOrder = state.games.sort((a, b) => {
-                if (a.name > b.name) {
-                    return "Ascendente" === payload[0] ? 1 : -1;
-                }
-                if (a.name < b.name) {
-                    return "Descendente" === payload[0] ? 1 : -1;
-                }
-                return 0;
-            });
-            return {
-                ...state,
-                games: newOrder,
-              };
-        }
-        if (payload[1] ==="genres") {
-            const newOrder = state.genres.sort((a, b) => {
-                if (a.rating > b.rating) {
-                    return "Ascendente" === payload[0] ? 1 : -1;
-                }
-                if (a.rating < b.rating) {
-                    return "Descendente" === payload[0] ? 1 : -1;
-                }
-                return 0;
-            });
-            return {
-                ...state,
-                genres: newOrder,
-            };
-        }
+        const newOrder = state.games.sort((a, b) =>
+        a.name.localeCompare(b.name));
+        return {
+          ...state,
+          games: newOrder,
+        };
       default:
         return state;
     }

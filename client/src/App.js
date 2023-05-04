@@ -26,7 +26,7 @@ function App() {
   let [platformsL, setplatformsL] = useState()
 
   const dispatch = useDispatch();
-  const { genres, platforms, gamesFound} = useSelector((state) => state);
+  const { genres, platforms} = useSelector((state) => state);
 
   useEffect(()=>{
     dispatch(getGames())
@@ -44,6 +44,8 @@ function App() {
 
   return (
     <div>
+      {/* {console.log(genres)}
+      {console.log(platforms)} */}
       <nav>
         { currentLocation.pathname === "/" ? null : <Nav/>}
       </nav>
