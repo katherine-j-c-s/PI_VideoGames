@@ -17,6 +17,7 @@ import SideBar from './components/SideBar/SideBar';
 import SearchBar from './components/SearchBar/SearchBar';
 import Genders from './components/SideBar/Genders/Genders';
 import Platforms from './components/SideBar/Platforms/Platforms';
+import AddGame from './components/SideBar/AddGame/AddGame';
 
 
 function App() {
@@ -43,26 +44,28 @@ function App() {
   }
 
   return (
-    <div>
+    <body className='body'>
       {/* {console.log(genres)}
       {console.log(platforms)} */}
       <nav>
         { currentLocation.pathname === "/" ? null : <Nav/>}
       </nav>
-      <aside>
-        { currentLocation.pathname === "/" ? null : <SideBar platforms={platformsL} />}
-      </aside>
-      <div>
-        <Routes>
-          <Route path='/' element={<Landing/>}/>
-          <Route path='/home' element={<Home/>}/>
-          <Route path='/search' element={<SearchBar onSearch={onSearch} />}/>
-          <Route path='/genres' element={<Genders genres={genresL}/>}/>
-          <Route path='/platforms' element={<Platforms/>}/>
-        </Routes>
+      <div className='showOf'>
+        <aside>
+          { currentLocation.pathname === "/" ? null : <SideBar platforms={platformsL} />}
+        </aside>
+        <div className='cards'>
+          <Routes>
+            <Route path='/' element={<Landing/>}/>
+            <Route path='/home' element={<Home/>}/>
+            <Route path='/search' element={<SearchBar onSearch={onSearch} />}/>
+            <Route path='/genres' element={<Genders genres={genresL}/>}/>
+            <Route path='/platforms' element={<Platforms/>}/>
+            <Route path='/addGame' element={<AddGame/>}/>
+          </Routes>
+        </div>
       </div>
-      
-    </div>
+    </body>
   )
 }
 

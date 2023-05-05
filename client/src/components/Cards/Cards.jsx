@@ -1,8 +1,7 @@
 import React from 'react'
+import './Cards.css'
 import Card from '../Card/Card'
 import Paginate from '../Paginate/Paginate'
-
-import { useSelector } from 'react-redux'
 
 export default function Cards({games,numPage}) {
   
@@ -14,8 +13,8 @@ export default function Cards({games,numPage}) {
   let viewGames = games?.slice(desde, hasta);
 
   return (
-    <div>
-      {/* {console.log(games)} */}
+    <div className='container'>
+      <div className='cardsContainer'>
         {viewGames &&
           viewGames.map((v)=>{
             return(
@@ -30,7 +29,9 @@ export default function Cards({games,numPage}) {
             )
           })
         }
-        <Paginate cantPages={cantPages}></Paginate>
+      </div>
+      <Paginate cantPages={cantPages}></Paginate>
     </div>
+    
   )
 }

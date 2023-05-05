@@ -1,4 +1,5 @@
 import React from 'react'
+import './Paginate.css'
 import { useDispatch, useSelector } from 'react-redux'
 import {nextPage,prevPage,handleNumber} from '../../redux/actions/actions'
 
@@ -16,19 +17,18 @@ export default function Paginate({ cantPages }) {
     dispatch(handleNumber(n));
   }
   return (
-    <div>
+    <div className='paginate'>
       {numPage > 1 ? (
-        <div>
-          <button onClick={prev}>PREV</button>
+        <div className='pags'>
+          <button className='btnPag' onClick={prev}>PREV</button>
           <p>{numPage - 1}</p>
         </div>
       ) : null}
-
       <h3>{numPage}</h3>
       {numPage < cantPages ? (
-        <div>
+        <div className='pags'>
           <p>{numPage + 1}</p>
-          <button onClick={next}>NEXT</button>
+          <button className='btnPag' onClick={next}>NEXT</button>
         </div>
       ) : null}
     </div>

@@ -17,10 +17,13 @@ export default function SideBar({platforms}) {
   return (
     <div>
         <Link to={'/genres'}>
-            <p>Gender</p>
+          <p>Gender</p>
+        </Link>
+        <Link to={'/addGame'}>
+          <p>Add Game</p>
         </Link>
         <div onClick={showPlatforms}>
-          <p >Platforms</p>
+          <p>Platforms</p>
         </div>
         {showP === true ? <Platforms platforms={platforms}/> : null}
     </div>

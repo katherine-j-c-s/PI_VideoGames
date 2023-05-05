@@ -1,4 +1,5 @@
 import React from 'react'
+import './Home.css'
 import { useDispatch, useSelector } from 'react-redux'
 import Cards from '../Cards/Cards'
 import {
@@ -22,20 +23,20 @@ export default function Home() {
     dispatch(handleNumber(1))
   }
   function resetBtton() {
-    console.log(gamesOrigin);
     dispatch(resetGames());
     dispatch(handleNumber(1))
   }
   return (
-    <div>
-        <div>
-          <button onClick={handleOrderRank} name='Highest'>Highest Rank</button>
-          <button onClick={handleOrderRank} name='Lowest'>Lowest Rank</button>
-          <button onClick={handleOrderAlf} name='alphabetical order'>alphabetical order</button>
-          <button onClick={resetBtton} name='Reset'>reset</button>
+    <div className='home'>
+      <h1 className='title'>Games You Might Like</h1>
+        <div className='btnsBox'>
+          <button className='btns' onClick={handleOrderRank} name='Highest'>Highest Rank</button>
+          <button className='btns' onClick={handleOrderRank} name='Lowest'>Lowest Rank</button>
+          <button className='btns' onClick={handleOrderAlf} name='alphabetical order'>alphabetical order</button>
+          <button className='btns' onClick={resetBtton} name='Reset'>reset</button>
         </div>
-        <h1>this is home</h1>
-        <Cards games={games} numPage={numPage}></Cards>
+        
+        <Cards className='containerCards' games={games} numPage={numPage}></Cards>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import './Card.css'
 import {FaLaptop ,FaAppStoreIos,FaPlaystation,FaXbox} from 'react-icons/fa'
 import {BsAndroid2, BsApple,BsNintendoSwitch} from 'react-icons/bs'
 import {TbWorld} from 'react-icons/tb'
@@ -18,28 +18,30 @@ export default function Card({name,image,genres,platforms}) {
         <TbWorld/>
     ])
     return (
-      <div>
-            <h1>{name}</h1>
-            <img src={image} alt={name} />
-             <ul>
-                {genres &&
-                genres.map(g=>{
+      <div className='cardContainer'>
+            <img className='image' src={image} alt={name} />
+            <div className='containerPG'>
+                <ul className='platf'>
+                    {platforms &&
+                    platforms.map(p=>{
+                    let icon = allPlatforms[p.id - 1]
                     return(
-                        <li>{g.name}</li>
+                        <li className='icon'>{icon}</li>
                     )
-                })
-            }
-            </ul>
-            <ul>
-                {platforms &&
-                platforms.map(p=>{
-                   let icon = allPlatforms[p.id - 1]
-                   return(
-                    <li>{icon}</li>
-                   )
-                })
-            }
-          </ul>
+                    })
+                }
+                </ul>
+                <ul className='generos'>
+                    {genres &&
+                    genres.map(g=>{
+                        return(
+                            <li className='genre'>{g.name}</li>
+                        )
+                    })
+                }
+                </ul>
+            </div>
+            <h1 className='name'>{name}</h1>
       </div>
     )
 }

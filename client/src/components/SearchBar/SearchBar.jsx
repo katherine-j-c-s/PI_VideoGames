@@ -8,7 +8,7 @@ export default function SearchBar({ onSearch }) {
   let [games,setGames] = useState(false)
   let [search,setSearch] = useState(false)
 
-  const { gamesFound } = useSelector((state)=> state)
+  const { gamesFound, numPage } = useSelector((state)=> state)
 
   function handleChange(event) {
     setname(event.target.value)
@@ -25,14 +25,13 @@ export default function SearchBar({ onSearch }) {
   }
   return (
     <div>
-      {/* {console.log(games)} */}
       <input onChange={handleChange} type="search" name="search" value={name} />
       {search === true ? 
         <button onClick={submit}>Search</button>
       : null}
       { games !== false ?  
         <div>
-          <Cards games={games} ></Cards>
+          <Cards games={games} numPage={numPage} ></Cards>
         </div>
        : null}
     </div>

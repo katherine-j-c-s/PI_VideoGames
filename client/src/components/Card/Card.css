@@ -1,0 +1,41 @@
+.cardContainer{
+    width: 21%;
+    height: 300px;
+    margin-bottom: 5%;
+}
+.name{
+    margin-top: 5px;
+    font-size: 28px;
+    color: antiquewhite;
+}
+.image{
+    width: 100%;
+    height: fit-content;
+}
+.containerPG{
+    display: flex;
+    align-items: baseline;
+}
+.generos{
+    width: 70%;
+    margin: 0;
+    justify-content: flex-end;
+    display: flex;
+    color: rgb(154, 164, 170);
+    list-style: none;
+}
+.platf{
+    display: flex;
+    justify-content: flex-start;
+    list-style: none;
+    width: 30%;
+    color: rgb(154, 164, 170);
+    margin: 0;
+    padding-left: 0;
+}
+.icon{
+    margin: 0 5px 0;
+}
+.genre{
+    margin: 0 5px 0;
+}

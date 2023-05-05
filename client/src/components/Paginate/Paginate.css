@@ -1,0 +1,18 @@
+.paginate{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    width: 100%;
+    color: aliceblue;
+}
+.pags{
+    display: flex;
+    height: 20px;
+    align-items: baseline;
+    margin: 2%;
+}
+.btnPag{
+    color: aliceblue;
+    background: none;
+    border: none;
+}
