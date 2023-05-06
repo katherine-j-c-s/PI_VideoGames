@@ -1,4 +1,51 @@
+.containerForm{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
 .imgHeart {
     width: 50px;
     height: 50px;
+}
+.inputs{
+    display: flex;
+    flex-direction: column;
+}
+label {
+    letter-spacing: 2px;
+    font-size: 32px;
+    font-weight: bold;
+    color: aliceblue;
+}
+p{
+    color: rgb(154, 164, 170);
+}
+.boxGenres{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 70%;
+}
+.btnGenreBox{
+    margin: 1%;
+}
+.selected{
+    background: rgb(154, 164, 170);
+    border: rgb(40, 130, 183) solid 2px;
+    border-radius: 30px;
+    letter-spacing: 2px;
+    padding: 15px;
+    color: black;
+    font-weight: bold;
+}
+.noSelected{
+    background: none;
+    letter-spacing: 2px;
+    border-radius: 30px;
+    padding: 15px;
+    border: rgb(71, 115, 140) solid 2px;
+    color: aliceblue;
+}
+.boxPlatf{
+    display: flex
 }

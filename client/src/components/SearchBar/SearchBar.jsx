@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Cards from '../Cards/Cards'
 
@@ -18,7 +18,9 @@ export default function SearchBar({ onSearch }) {
       setSearch(false)
     }
   }
-
+  useEffect(()=>{
+    console.log(gamesFound);
+  },[submit])
   function submit() {
     onSearch(name)
     setGames(gamesFound)

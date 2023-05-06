@@ -5,11 +5,14 @@ import imageN from '../../../img/heart.png'
 import imageS from '../../../img/heartS.png'
 import './AddGame.css'
 
-
+const reguexURL = /^(ftp|http|https):\/\/[^ "]+$/;
 
 export default function AddGame() {
-    let {genres}= useSelector((state)=>state)
-    let [addGenres,setAddGenres] = useState([])
+
+    let {genres,platforms}= useSelector((state)=>state)
+
+    let [addGenre,setaddGenre] = useState({})
+    let [addPlatform,setaddPlatform] = useState([])
     let [inputs,setInputs] = useState({
         name: '',
         image: '',
@@ -20,26 +23,14 @@ export default function AddGame() {
         platforms: []
     })
     let [errors,setErrors] = useState({
-    name: '',
-    image: '',
-    description: '',
-    releaseDate: '',
-    rating: '',
-    genres: [],
-    platforms: []
+        name: '',
+        image: '',
+        description: '',
+        releaseDate: '',
+        rating: '',
+        genres: [],
+        platforms: []
     })
-    function validate(inputs) {
-    var errors = {}
-    for (const prop in inputs) {
-        if (inputs[prop] === '') {
-            errors[prop] = `Require a ${prop}`;
-        }
-        if (inputs[prop] === []) {
-            errors[prop] = `You most choose any ${prop}`;
-        }
-    }
-    return errors
-    }
     function handleChange(event) {
     setInputs({
         ...inputs,
@@ -50,62 +41,105 @@ export default function AddGame() {
         [event.target.name]: event.target.value,
     }))
     }
-    function handleSelected(e) {
-    let value = e.target.__reactProps$rfcpmhqifde.value
+    function handleRating(e) {
+    let value = e.target.__reactProps$yzcojv04ioj.value
     setInputs({
         ...inputs,
         [e.target.name] : value
     })
+    setErrors(validate({
+        ...inputs,
+        [e.target.name] : value,
+    }))
     }
     function handleGenres(e) {
-        let id = e.target.name
-        setAddGenres([...addGenres, id])
-        console.log(addGenres);
-        console.log(id);
+        let id = e.target.value
+        let name = e.target.name
+        let repited = Object.keys(addGenre).find(g => g === name)
+        if (repited) {
+            let delate = {}
+            for (const prop in addGenre) {
+                if (prop !== repited) {
+                    delate[prop]=addGenre[prop]
+                }
+            }
+            setaddGenre(delate)
+            setErrors(validate({
+                ...inputs,
+                genres: delate,
+            }))
+            
+        }else{
+            setaddGenre({...addGenre, [name]:id})
+            setErrors(validate({
+                ...inputs,
+                genres: addGenre,
+            }))
+        }
+    }
+    function handleplatforms(e) {
+        let name = e.target.name
+        let repited = addPlatform.find( g => g === name )
+        if (repited) {
+            let delate = addPlatform.filter( p => p !== name ) 
+            setaddPlatform(delate)
+            setErrors(validate({
+                ...inputs,
+                platforms: delate,
+            }))
+        }else{
+            setaddPlatform([...addPlatform,name])
+            setErrors(validate({
+                ...inputs,
+                platforms: addPlatform,
+            }))
+        }
+    }
+    function validate(i) {
+        console.log(i);
+        var errors = {}
+        // if (!inputs.name) {
+        //     errors.name = "Most Have A Name";
+        // }else if (!inputs.name.lenght < 3) {
+        //     errors.name = "The Name Most Have A Minimum Of 3 Letters";
+        // } 
+        // else if (reguexURL.test(inputs.image)) {
+        //     errors.password = "The Image Most Be An URL";
+        // }
+        return errors;
     }
     function handleSubmit(event) {
-    event.preventDefault()
-    // console.log(inputs);
-    setAddGenres([])
-    setInputs({
-        name: '',
-        image: '',
-        description: '',
-        releaseDate: '',
-        rating: '',
-        genres: [],
-        platforms: []
-    })
-    // console.log(inputs);
-    // for (let i = 0; i < Object.values(inputs).length; i++) {
-    //   if (Object.values(inputs)[i].length === 0) {
-    //     return alert("Debe llenar todos los campos")
-    //   }
-    // }
-    // if (Object.keys(errors).length === 0) {
-    //   alert('Datos completos')
-    //   setInputs({
-    //     name: '',
-    //     image: '',
-    //     description: '',
-    //     releaseDate: '',
-    //     rating: '',
-    //     genres: [],
-    //     platforms: []
-    //   })
-    //   setErrors({
-    //     name: '',
-    //     image: '',
-    //     description: '',
-    //     releaseDate: '',
-    //     rating: '',
-    //     genres: [],
-    //     platforms: []
-    //   })
-    // }
+        let contentPlatf = addPlatform.map(p=>{
+            let add = {
+                platform:{
+                    name:p
+                }
+            }
+            return add
+        })
+        let contentGern= Object.values(addGenre).map((g)=>{
+            let add= {
+                id:g
+            }
+            return add
+        })
+        inputs.platforms=contentPlatf
+        inputs.genres=contentGern
+        event.preventDefault()
+        setaddGenre({})
+        setaddPlatform([])
+        setInputs({
+            name: '',
+            image: '',
+            description: '',
+            releaseDate: '',
+            rating: '',
+            genres: [],
+            platforms: []
+        })
     }
     return (
-    <div className='container'>
+    <div className='containerForm'>
         <form onSubmit={handleSubmit} className='forms'>
         <div className='inputs' >
             <label>Name:</label>
@@ -145,12 +179,18 @@ export default function AddGame() {
             <label>ReleaseDate:</label>
             <p>Add The Date Your Game Was Realised:</p>
             <input 
-            className={errors.releaseDate && 'warning'}
+                type="date" 
+                className={errors.releaseDate && 'warning'}
+                name="releaseDate"
+                onChange={handleChange}
+            />
+            {/* <input 
+            
             type="text" 
-            name="releaseDate"
+            
             value={inputs.releaseDate} 
             placeholder="ReleaseDate" 
-            onChange={handleChange}/>
+            /> */}
         </div>
         <p className='danger'>{errors.image}</p>
         <div>
@@ -159,7 +199,7 @@ export default function AddGame() {
             <div>
                 {inputs.rating === '' || inputs.rating < 1 ? (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageN} 
                     alt="Rating" 
                     name='rating' 
@@ -169,21 +209,21 @@ export default function AddGame() {
                 {inputs.rating >= 1 && inputs.rating !== '' ? 
                     (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageS} 
                     alt="Rating" 
                     name='rating' 
                     value='1' 
                 />)
                 : null}
-                {inputs.rating >= 1 && inputs.rating !== '' ?  
+                {inputs.rating === "1"?  
                     (<label>Not Good At All</label>)
                 : null}
             </div>
             <div>
                 {inputs.rating === '' || inputs.rating < 2 ? (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageN} 
                     alt="Rating" 
                     name='rating' 
@@ -193,21 +233,21 @@ export default function AddGame() {
                 {inputs.rating >= 2 && inputs.rating !== '' ? 
                     (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageS} 
                     alt="Rating" 
                     name='rating' 
                     value='2' 
                 />)
                 : null}
-                {inputs.rating >= 2 && inputs.rating !== '' ?  
+                {inputs.rating === "2"?  
                     (<label>Not So bad</label>)
                 : null}
             </div>
             <div>
                 {inputs.rating === '' || inputs.rating < 3 ? (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageN} 
                     alt="Rating" 
                     name='rating' 
@@ -217,21 +257,21 @@ export default function AddGame() {
                 {inputs.rating >= 3 && inputs.rating !== '' ? 
                     (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageS} 
                     alt="Rating" 
                     name='rating' 
                     value='3' 
                 />)
                 : null}
-                {inputs.rating >= 3 && inputs.rating !== '' ? 
+                {inputs.rating === "3" ? 
                     (<label>It's nice</label>)
                 : null}
             </div>
             <div>
                 {inputs.rating === '' || inputs.rating < 4 ? (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageN} 
                     alt="Rating" 
                     name='rating' 
@@ -241,21 +281,21 @@ export default function AddGame() {
                 {inputs.rating >= 4 && inputs.rating !== '' ? 
                     (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageS} 
                     alt="Rating" 
                     name='rating' 
                     value='4' 
                 />)
                 : null}
-                {inputs.rating >= 4 && inputs.rating !== '' ? 
+                {inputs.rating === "4" ? 
                     (<label>It's Amazing</label>)
                 : null}
             </div>
             <div>
                 {inputs.rating === '' || inputs.rating < 5 ? (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageN} 
                     alt="Rating" 
                     name='rating' 
@@ -265,29 +305,57 @@ export default function AddGame() {
                 {inputs.rating >= 5 && inputs.rating !== '' ? 
                     (<img 
                     className='imgHeart' 
-                    onClick={handleSelected} 
+                    onClick={handleRating} 
                     src={imageS} 
                     alt="Rating" 
                     name='rating' 
                     value='5' 
                 />)
                 : null}
-                {inputs.rating >= 5 && inputs.rating !== '' ?
+                {inputs.rating === "5" ?
                     (<label>The Best Game Ever</label>)
                 : null}
             </div>
         </div>
         <div>
-            <h1>Add Genres</h1>
-            {genres && 
-                genres.map(g=>{
-                    return(
-                        <button onClick={handleGenres} name={g.id}>{g.name}</button>
-                    )
-                })
-            }
+            <label>Add Genres</label>
+            <div className='boxGenres'>
+                {genres && 
+                    genres.map(g=>{
+                        return(
+                            <div className='btnGenreBox'>
+                                <button
+                                type='button' 
+                                onClick={handleGenres} 
+                                name={g.name}
+                                value={g.id} 
+                                className={addGenre[g.name] !== undefined ? 'selected' : 'noSelected'}
+                                >{g.name}</button>
+                            </div>
+                        )
+                    })
+                }
+            </div>
         </div>
-        
+        <div>
+            <label>Add Platforms</label>
+            <div className='boxPlatf'>
+                {platforms && 
+                    platforms.map(g=>{
+                        return(
+                            <div className='btnPlatfBox'>
+                                <button
+                                type='button' 
+                                onClick={handleplatforms} 
+                                name={g.name}
+                                className={addPlatform.find(p=>p===g.name) !== undefined ? 'selected' : 'noSelected'}
+                                >{g.name}</button>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        </div>
         <button type='submit'>Enviar</button>
         </form>
     </div>
