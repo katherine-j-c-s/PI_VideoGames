@@ -1,25 +1,27 @@
 import React from 'react'
 import CardsG from '../CardsG/CardsG'
+import { useSelector } from 'react-redux'
+import './Genre.css'
 
-
-export default function Genders({genres}) {
+export default function Genders() {
+  let {genres} = useSelector((state)=>state)
   return (
-    <div>
-        <h1>This are the Genres</h1>
-        {genres &&
-          genres.map(g=>{
-            return(
-              <CardsG 
-              id = {g.id}
-              name = {g.name}
-              image = {g.image}
-              games_count = {g.games_count}
-              />
-            )
-          })
-
-        }
-        
+    <div className='alingGenres'>
+        <h1 className='title'>This are the Genres</h1>
+        <div className='containerCardsG'>
+          {genres &&
+            genres.map(g=>{
+              return(
+                <CardsG 
+                id = {g.id}
+                name = {g.name}
+                image = {g.image}
+                games_count = {g.games_count}
+                />
+              )
+            })
+          }
+        </div>
     </div>
   )
 }

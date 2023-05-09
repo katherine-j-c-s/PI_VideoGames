@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-
+import { useDispatch, useSelector } from 'react-redux'
+import {addGame} from '../../../redux/actions/actions'
 import imageN from '../../../img/heart.png'
 import imageS from '../../../img/heartS.png'
 import './AddGame.css'
@@ -9,7 +9,10 @@ const reguexURL = /^(ftp|http|https):\/\/[^ "]+$/;
 
 export default function AddGame() {
 
-    let {genres,platforms}= useSelector((state)=>state)
+    let {genres,platforms,games}= useSelector((state)=>state)
+    const dispatch = useDispatch()
+
+    let [showError,setShowError] = useState(false)
 
     let [addGenre,setaddGenre] = useState({})
     let [addPlatform,setaddPlatform] = useState([])
@@ -22,35 +25,52 @@ export default function AddGame() {
         genres: [],
         platforms: []
     })
+
     let [errors,setErrors] = useState({
         name: '',
         image: '',
         description: '',
         releaseDate: '',
         rating: '',
-        genres: [],
-        platforms: []
     })
+    function validate(i) {
+        var errors = {}
+        if (i.name.length < 3) {
+            errors.name = "The Name Most Have A Minimum Of 3 Letters";
+        }else if (!i.name) {
+            errors.name = "Most Have A Name";
+        }else if (!reguexURL.test(i.image)) {
+            errors.image = "The Image Most Be An URL";
+        }else if (!i.description) {
+            errors.description = "Most Add The Description To Your Game";
+        }else if (!i.releaseDate) {
+            errors.releaseDate = "Most Select The Date Your Game Was Made";
+        }else if (!i.rating) {
+            errors.rating = "Select A Rating To Your Game";
+        }
+        return errors;
+    }
+
     function handleChange(event) {
-    setInputs({
-        ...inputs,
-        [event.target.name]: event.target.value
-    })
-    setErrors(validate({
-        ...inputs,
-        [event.target.name]: event.target.value,
-    }))
+        setInputs({
+            ...inputs,
+            [event.target.name]: event.target.value
+        })
+        setErrors(validate({
+            ...inputs,
+            [event.target.name]: event.target.value,
+        }))
     }
     function handleRating(e) {
-    let value = e.target.__reactProps$yzcojv04ioj.value
-    setInputs({
-        ...inputs,
-        [e.target.name] : value
-    })
-    setErrors(validate({
-        ...inputs,
-        [e.target.name] : value,
-    }))
+        let value = e.target.name
+        setInputs({
+            ...inputs,
+            rating : value
+        })
+        setErrors(validate({
+            ...inputs,
+            rating : value,
+        }))
     }
     function handleGenres(e) {
         let id = e.target.value
@@ -64,18 +84,13 @@ export default function AddGame() {
                 }
             }
             setaddGenre(delate)
-            setErrors(validate({
-                ...inputs,
-                genres: delate,
-            }))
-            
         }else{
             setaddGenre({...addGenre, [name]:id})
-            setErrors(validate({
-                ...inputs,
-                genres: addGenre,
-            }))
         }
+        setErrors(validate({
+            ...inputs,
+            genres : [...Object.keys(addGenre)],
+        }))
     }
     function handleplatforms(e) {
         let name = e.target.name
@@ -83,60 +98,54 @@ export default function AddGame() {
         if (repited) {
             let delate = addPlatform.filter( p => p !== name ) 
             setaddPlatform(delate)
-            setErrors(validate({
-                ...inputs,
-                platforms: delate,
-            }))
         }else{
             setaddPlatform([...addPlatform,name])
-            setErrors(validate({
-                ...inputs,
-                platforms: addPlatform,
-            }))
         }
-    }
-    function validate(i) {
-        console.log(i);
-        var errors = {}
-        // if (!inputs.name) {
-        //     errors.name = "Most Have A Name";
-        // }else if (!inputs.name.lenght < 3) {
-        //     errors.name = "The Name Most Have A Minimum Of 3 Letters";
-        // } 
-        // else if (reguexURL.test(inputs.image)) {
-        //     errors.password = "The Image Most Be An URL";
-        // }
-        return errors;
-    }
+        setErrors(validate({
+            ...inputs,
+            platforms : addPlatform,
+        }))
+    } 
     function handleSubmit(event) {
-        let contentPlatf = addPlatform.map(p=>{
-            let add = {
-                platform:{
-                    name:p
-                }
-            }
-            return add
-        })
-        let contentGern= Object.values(addGenre).map((g)=>{
-            let add= {
-                id:g
-            }
-            return add
-        })
-        inputs.platforms=contentPlatf
-        inputs.genres=contentGern
         event.preventDefault()
-        setaddGenre({})
-        setaddPlatform([])
-        setInputs({
-            name: '',
-            image: '',
-            description: '',
-            releaseDate: '',
-            rating: '',
-            genres: [],
-            platforms: []
-        })
+        if ( addPlatform.length > 0 && Object.keys(addGenre).length > 0 && Object.keys(errors).length === 0) {
+            let contentPlatf = addPlatform.map(p=>{
+                let add = {
+                    platform:{
+                        name:p
+                    }
+                }
+                return add
+            })
+            let contentGern= Object.values(addGenre).map((g)=>{
+                let add= {
+                    id:g
+                } 
+                return add
+            })
+            inputs.genres = contentGern
+            inputs.platforms = contentPlatf
+            dispatch(addGame(inputs)).then((data)=>console.log(data.payload))
+            setaddGenre({})
+            setaddPlatform([])
+            setInputs({
+                name: '',
+                image: '',
+                description: '',
+                releaseDate: '',
+                rating: '',
+            })
+            setErrors({
+                name: '',
+                image: '',
+                description: '',
+                releaseDate: '',
+                rating: '',
+            })
+            setShowError(false)
+        }else{
+            setShowError(true)
+        }
     }
     return (
     <div className='containerForm'>
@@ -145,179 +154,178 @@ export default function AddGame() {
             <label>Name:</label>
             <p>Write Your Game's Name Here...</p>
             <input 
-            className={errors.name && 'warning'}
+            className='inputSmalls'
             type="text" 
             name="name"
             value={inputs.name} 
             placeholder="Name" 
             onChange={handleChange}/>
+            {showError === true  ?  
+                <p className='danger'>{errors.name}</p>
+            : null}
         </div>
-        <p className='danger'>{errors.name}</p>
         <div className='inputs' >
             <label>Image:</label>
             <p>Add An URL For Your Game Here...</p>
             <input 
-            className={errors.image && 'warning'}
+            className='inputSmalls'
             type="text" 
             name="image"
             value={inputs.image} 
             placeholder="image(URL)" 
             onChange={handleChange}/>
+            {showError === true  ?  
+                <p className='danger'>{errors.image}</p>
+            : null}
         </div>
-        <p className='danger'>{errors.image}</p>
         <div className='inputs'>
             <label>Description:</label>
             <p>Games Description:</p>
             <input 
             type="textarea"
             name="description"
+            className='inputSmalls'
             value={inputs.description}  
             placeholder='Description' 
             onChange={handleChange}/>
+            {showError === true  ?  
+                <p className='danger'>{errors.description}</p>
+            : null}
         </div>
         <div className='inputs' >
             <label>ReleaseDate:</label>
             <p>Add The Date Your Game Was Realised:</p>
             <input 
                 type="date" 
-                className={errors.releaseDate && 'warning'}
+                className='inputSmalls'
                 name="releaseDate"
                 onChange={handleChange}
             />
-            {/* <input 
-            
-            type="text" 
-            
-            value={inputs.releaseDate} 
-            placeholder="ReleaseDate" 
-            /> */}
+            <p className='danger'>{errors.releaseDate}</p>
+            {showError === true  ?  
+                <p className='danger'>{errors.releaseDate}</p>
+            : null}        
         </div>
-        <p className='danger'>{errors.image}</p>
-        <div>
-            <label className='selectedR'>rating:</label>
+        <div className='RatingContainer'>
+            <label className='selectedR'>Rating:</label>
             <p>How Much Do You Rate Your Game?</p>
-            <div>
-                {inputs.rating === '' || inputs.rating < 1 ? (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageN} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='1' 
-                />) : null
-                }
-                {inputs.rating >= 1 && inputs.rating !== '' ? 
-                    (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageS} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='1' 
-                />)
-                : null}
-                {inputs.rating === "1"?  
-                    (<label>Not Good At All</label>)
-                : null}
+            <div className='heartsContainer'>
+                <div className='heart'>
+                    {inputs.rating === '' || inputs.rating < 1 ? (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageN} 
+                        alt="Rating" 
+                        name='111' 
+                    />) : null
+                    }
+                    {inputs.rating >= 1 && inputs.rating !== '' ? 
+                        (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageS} 
+                        alt="Rating" 
+                        name='111'  
+                    />)
+                    : null}
+                    {inputs.rating === "1"?  
+                        (<label>Not Good At All</label>)
+                    : null}
+                </div>
+                <div className='heart'>
+                    {inputs.rating === '' || inputs.rating < 2 ? (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageN} 
+                        alt="Rating" 
+                        name='222' 
+                    />) : null
+                    }
+                    {inputs.rating >= 2 && inputs.rating !== '' ? 
+                        (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageS} 
+                        alt="Rating" 
+                        name='222' 
+                    />)
+                    : null}
+                    {inputs.rating === "2"?  
+                        (<label>Not So bad</label>)
+                    : null}
+                </div>
+                <div className='heart'>
+                    {inputs.rating === '' || inputs.rating < 3 ? (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageN} 
+                        alt="Rating" 
+                        name='333' 
+                    />) : null
+                    }
+                    {inputs.rating >= 3 && inputs.rating !== '' ? 
+                        (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageS} 
+                        alt="Rating" 
+                        name='333' 
+                    />)
+                    : null}
+                    {inputs.rating === "3" ? 
+                        (<label>It's nice</label>)
+                    : null}
+                </div>
+                <div className='heart'>
+                    {inputs.rating === '' || inputs.rating < 4 ? (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageN} 
+                        alt="Rating" 
+                        name='444' 
+                    />) : null
+                    }
+                    {inputs.rating >= 4 && inputs.rating !== '' ? 
+                        (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageS} 
+                        alt="Rating" 
+                        name='444' 
+                    />)
+                    : null}
+                    {inputs.rating === "4" ? 
+                        (<label>It's Amazing</label>)
+                    : null}
+                </div>
+                <div className='heart'>
+                    {inputs.rating === '' || inputs.rating < 5 ? (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageN} 
+                        alt="Rating" 
+                        name='555' 
+                    />) : null
+                    }
+                    {inputs.rating >= 5 && inputs.rating !== '' ? 
+                        (<img 
+                        className='imgHeart' 
+                        onClick={handleRating} 
+                        src={imageS} 
+                        alt="Rating" 
+                        name='555' 
+                    />)
+                    : null}
+                    {inputs.rating === "5" ?
+                        (<label>The Best Game Ever</label>)
+                    : null}
+                </div>
             </div>
-            <div>
-                {inputs.rating === '' || inputs.rating < 2 ? (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageN} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='2' 
-                />) : null
-                }
-                {inputs.rating >= 2 && inputs.rating !== '' ? 
-                    (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageS} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='2' 
-                />)
-                : null}
-                {inputs.rating === "2"?  
-                    (<label>Not So bad</label>)
-                : null}
-            </div>
-            <div>
-                {inputs.rating === '' || inputs.rating < 3 ? (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageN} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='3' 
-                />) : null
-                }
-                {inputs.rating >= 3 && inputs.rating !== '' ? 
-                    (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageS} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='3' 
-                />)
-                : null}
-                {inputs.rating === "3" ? 
-                    (<label>It's nice</label>)
-                : null}
-            </div>
-            <div>
-                {inputs.rating === '' || inputs.rating < 4 ? (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageN} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='4' 
-                />) : null
-                }
-                {inputs.rating >= 4 && inputs.rating !== '' ? 
-                    (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageS} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='4' 
-                />)
-                : null}
-                {inputs.rating === "4" ? 
-                    (<label>It's Amazing</label>)
-                : null}
-            </div>
-            <div>
-                {inputs.rating === '' || inputs.rating < 5 ? (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageN} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='5' 
-                />) : null
-                }
-                {inputs.rating >= 5 && inputs.rating !== '' ? 
-                    (<img 
-                    className='imgHeart' 
-                    onClick={handleRating} 
-                    src={imageS} 
-                    alt="Rating" 
-                    name='rating' 
-                    value='5' 
-                />)
-                : null}
-                {inputs.rating === "5" ?
-                    (<label>The Best Game Ever</label>)
-                : null}
-            </div>
+            {showError === true  ?  
+                <p className='danger'>{errors.rating}</p>
+            : null}
         </div>
-        <div>
+        <div className='GenresContainer'>
             <label>Add Genres</label>
             <div className='boxGenres'>
                 {genres && 
@@ -336,8 +344,11 @@ export default function AddGame() {
                     })
                 }
             </div>
+            {showError === true && Object.keys(addGenre).length === 0 ?  
+                <p className='danger'>Most Choose The Genres Of Your Game</p>
+            : null}
         </div>
-        <div>
+        <div className='PlatformsContainer'>
             <label>Add Platforms</label>
             <div className='boxPlatf'>
                 {platforms && 
@@ -355,8 +366,14 @@ export default function AddGame() {
                     })
                 }
             </div>
+            {showError === true && addPlatform.length === 0 ?
+            <p className='danger'>Most Choose The Platform To Play Your Game</p>
+            : null}
         </div>
-        <button type='submit'>Enviar</button>
+        <div className='btnSubmti'>
+            <button type='submit'>Enviar</button>
+        </div>
+        
         </form>
     </div>
     ) 

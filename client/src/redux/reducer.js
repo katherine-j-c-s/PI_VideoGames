@@ -7,14 +7,12 @@ import {
     ORDER_RANK,
     ORDER_ALFAB,
     RESETGAMES,
-    RESETGENRES,
     NEXT_PAGE,
     PREV_PAGE,
     HANDLE_NUMBER
   } from "./actions/types";
   
   const initialState = {
-    newGames: [],
     numPage: 1,
     genres: [],
     games: [],
@@ -29,7 +27,7 @@ import {
       case ADD_GAME:
         return {
           ...state,
-          newGames: [...state.newGames, payload],
+          games: [...state.games ,payload],
         };
       case SEARCH_GAME:
         return {
@@ -74,12 +72,6 @@ import {
           ...state,
           games: altern
         };
-      case RESETGENRES:
-        let alternG = state.genresOrigin
-        return {
-          ...state,
-          genres: alternG,
-        };
       case ORDER_RANK:
         if (payload[1] ==="games") {
           const newOrder = state.games.sort((a, b) => {
@@ -94,21 +86,6 @@ import {
           return {
             ...state,
             games: newOrder,
-          };
-        }
-        if (payload[1] ==="genres") {
-          const newOrder = state.genres.sort((a, b) => {
-            if (a.rating > b.rating) {
-              return "Ascendente" === payload[0] ? 1 : -1;
-            }
-            if (a.rating < b.rating) {
-              return "Descendente" === payload[0] ? 1 : -1;
-            }
-            return 0;
-          });
-          return {
-            ...state,
-            genres: newOrder,
           };
         }
         break

@@ -1,0 +1,8 @@
+.alingGenres{
+    width: 100%;
+}
+.containerCardsG{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}

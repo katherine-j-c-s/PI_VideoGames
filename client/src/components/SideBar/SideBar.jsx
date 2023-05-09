@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Platforms from './Platforms/Platforms'
+import './SideBar.css'
 
-
-export default function SideBar({platforms}) {
+export default function SideBar() {
   let [showP,setShowP] = useState(false)
   
   function showPlatforms() {
@@ -15,17 +15,17 @@ export default function SideBar({platforms}) {
     }
   }
   return (
-    <div>
-        <Link to={'/genres'}>
+    <div className='sideBar'>
+        <Link className='textSideBar' to={'/genres'}>
           <p>Gender</p>
         </Link>
-        <Link to={'/addGame'}>
+        <Link className='textSideBar' to={'/addGame'}>
           <p>Add Game</p>
         </Link>
-        <div onClick={showPlatforms}>
+        <div className='textSideBar' onClick={showPlatforms}>
           <p>Platforms</p>
         </div>
-        {showP === true ? <Platforms platforms={platforms}/> : null}
+        {showP === true ? <Platforms/> : null}
     </div>
   )
 }

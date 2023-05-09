@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import {searchGame} from '../../redux/actions/actions'
 import Cards from '../Cards/Cards'
+import './SearchBar.css'
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar() {
 
   let [name,setname] = useState("")
   let [games,setGames] = useState(false)
   let [search,setSearch] = useState(false)
+  const dispatch = useDispatch()
 
   const { gamesFound, numPage } = useSelector((state)=> state)
 
   function handleChange(event) {
     setname(event.target.value)
+    dispatch(searchGame(name))
     if (name.length > 1) {
       setSearch(true)
     }else{
       setSearch(false)
     }
   }
-  useEffect(()=>{
-    console.log(gamesFound);
-  },[submit])
   function submit() {
-    onSearch(name)
     setGames(gamesFound)
   }
   return (
-    <div>
-      <input onChange={handleChange} type="search" name="search" value={name} />
-      {search === true ? 
-        <button onClick={submit}>Search</button>
-      : null}
+    <div className='searchContainer'>
+      <div className='search'>
+        <input className='inputSearch' onChange={handleChange} type="search" name="search"/>
+        {search === true ? 
+          <button className='btnSearch' onClick={submit}>Search</button>
+        : null}
+      </div>
       { games !== false ?  
         <div>
           <Cards games={games} numPage={numPage} ></Cards>

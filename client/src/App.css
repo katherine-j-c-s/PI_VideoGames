@@ -8,17 +8,15 @@ nav {
 }
 .showOf{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 aside{
   width: 13%;
   display: flex;
-  justify-content:flex-start;
 }
 .cards {
   width: 85%;
   display: flex;
-  justify-content: flex-start;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

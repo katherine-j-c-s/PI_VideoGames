@@ -1,11 +1,25 @@
-import React, { useState } from 'react'
+import imageN from '../../img/heart.png'
+import imageS from '../../img/heartS.png'
 import './Card.css'
+
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import {FaLaptop ,FaAppStoreIos,FaPlaystation,FaXbox} from 'react-icons/fa'
 import {BsAndroid2, BsApple,BsNintendoSwitch} from 'react-icons/bs'
 import {TbWorld} from 'react-icons/tb'
 import {GrArchlinux} from 'react-icons/gr'
 
-export default function Card({name,image,genres,platforms}) {
+export default function Card({id,name,image,genres,platforms,releaseDate,rating}) {
+    let [showD,setShoeD]= useState()
+
+    let year = releaseDate.toString().slice(0,4)
+    let month = releaseDate.toString().slice(4,6)
+    let day = releaseDate.toString().slice(6,8)
+    let date = day + "/" + month + "/" + year
+    
+    let rate = rating.toString()[0]
+
     let [allPlatforms,setAllPlatforms] = useState([
         <FaLaptop/>,
         <FaPlaystation/>,
@@ -17,31 +31,64 @@ export default function Card({name,image,genres,platforms}) {
         <FaAppStoreIos/>,
         <TbWorld/>
     ])
+    function MouseOver(event) {
+        setShoeD(true)
+    }
+    function MouseOut(event) {
+        setShoeD(false)
+    }
     return (
-      <div className='cardContainer'>
+      <div onMouseOver={MouseOver} onMouseOut={MouseOut} className='cardContainer'>
             <img className='image' src={image} alt={name} />
-            <div className='containerPG'>
-                <ul className='platf'>
-                    {platforms &&
-                    platforms.map(p=>{
-                    let icon = allPlatforms[p.id - 1]
-                    return(
-                        <li className='icon'>{icon}</li>
-                    )
-                    })
-                }
-                </ul>
-                <ul className='generos'>
-                    {genres &&
-                    genres.map(g=>{
-                        return(
-                            <li className='genre'>{g.name}</li>
-                        )
-                    })
-                }
-                </ul>
-            </div>
+            <ul className='platf'>
+                {platforms &&
+                platforms.map(p=>{
+                let icon = allPlatforms[p.id - 1]
+                return(
+                    <li className='icon'>{icon}</li>
+                )
+                })
+            }
+            </ul>
             <h1 className='name'>{name}</h1>
+            {showD === true ? 
+            <div className='containerPG'>
+                <div>
+                    <p>genres</p>
+                    <ul className='generos'>
+                        {genres &&
+                        genres.map(g=>{
+                            return(
+                                <li className='genre'>{g.name}</li>
+                            )
+                        })
+                    }
+                    </ul>
+                </div>
+                <div>
+                    <p>date:</p>
+                    <p>{date}</p>
+                </div>
+                <div>
+                    {rate >= 1 ? (<img className='imgHeart' src={imageS} alt="Rating"/>): null}
+                    
+                    {rate < 2 ? (<img className='imgHeart' src={imageN} alt="Rating"/>) : null}
+                    {rate >= 2 ? (<img className='imgHeart' src={imageS} alt="Rating"/>): null}
+                    
+                    {rate < 3 ? (<img className='imgHeart' src={imageN} alt="Rating"/>) : null}
+                    {rate >= 3 ? (<img className='imgHeart' src={imageS} alt="Rating"/>): null}
+
+                    {rate < 4 ? (<img className='imgHeart' src={imageN} alt="Rating"/>) : null}
+                    {rate >= 4 ? (<img className='imgHeart' src={imageS} alt="Rating"/>): null}
+                    
+                    {rate < 5 ? (<img className='imgHeart' src={imageN} alt="Rating"/>) : null}
+                    {rate >= 5 ? (<img className='imgHeart' src={imageS} alt="Rating"/>): null}
+                </div>
+                <Link to={`/detail/${id}`}>
+                    <p>Details</p>
+                </Link>
+            </div>
+            : null}
       </div>
     )
 }

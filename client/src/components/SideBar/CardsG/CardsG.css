@@ -1,0 +1,27 @@
+.containerGenreC{
+    width: 28%;
+    display: flex;
+    flex-direction: column;
+    margin: 1%;
+}
+.containerGenreO{
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    margin: 1%;
+}
+.countsG{
+    display: flex;
+    justify-content: space-between;
+}
+.iconsOCBox{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+.iconOC{
+    width: 20%;
+    display: flex;
+    
+    color: aliceblue;
+}

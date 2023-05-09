@@ -24,6 +24,8 @@ export default function Cards({games,numPage}) {
                 name={v.name}
                 image={v.image}
                 genres={v.Genres}
+                rating={v.rating}
+                releaseDate={v.releaseDate}
                 platforms={v.ParentPlatforms}
               />
             )

@@ -7,7 +7,6 @@ import {
   getGames, 
   getGenres, 
   getPlatforms,
-  searchGame
 } from './redux/actions/actions'
 
 import Landing from './components/Landing/Landing';
@@ -18,30 +17,21 @@ import SearchBar from './components/SearchBar/SearchBar';
 import Genders from './components/SideBar/Genders/Genders';
 import Platforms from './components/SideBar/Platforms/Platforms';
 import AddGame from './components/SideBar/AddGame/AddGame';
+import Detail from './components/Detail/Detail';
 
 
 function App() {
   let currentLocation = useLocation()
 
-  let [genresL, setGenresL] = useState()
-  let [platformsL, setplatformsL] = useState()
-
   const dispatch = useDispatch();
-  const { genres, platforms} = useSelector((state) => state);
 
   useEffect(()=>{
     dispatch(getGames())
 
     dispatch(getGenres())
-    setGenresL(genres)
 
     dispatch(getPlatforms())
-    setplatformsL(platforms)
   },[])
-
-  function onSearch(name){
-    dispatch(searchGame(name))
-  }
 
   return (
     <body className='body'>
@@ -52,16 +42,16 @@ function App() {
       </nav>
       <div className='showOf'>
         <aside>
-          { currentLocation.pathname === "/" ? null : <SideBar platforms={platformsL} />}
+          { currentLocation.pathname === "/" ? null : <SideBar/>}
         </aside>
         <div className='cards'>
           <Routes>
             <Route path='/' element={<Landing/>}/>
             <Route path='/home' element={<Home/>}/>
-            <Route path='/search' element={<SearchBar onSearch={onSearch} />}/>
-            <Route path='/genres' element={<Genders genres={genresL}/>}/>
-            <Route path='/platforms' element={<Platforms/>}/>
+            <Route path='/search' element={<SearchBar/>}/>
+            <Route path='/genres' element={<Genders/>}/>
             <Route path='/addGame' element={<AddGame/>}/>
+            <Route path="/detail/:id" element={<Detail/>}/>
           </Routes>
         </div>
       </div>

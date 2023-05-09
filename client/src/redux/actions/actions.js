@@ -17,11 +17,8 @@ import {
   
   export function addGame(game) {
     return async function (dispatch) {
-        try {
-          const {data} = await axios.post(
-            `http://localhost:3001/videogames`,
-            game
-          );
+        try { 
+          const {data} = await axios.post(`http://localhost:3001/videogames`,game);
           return dispatch({
             type: ADD_GAME,
             payload: data,
@@ -126,12 +123,6 @@ import {
     // el type es lo que se va a ordenar como el genres, games
     return {
       type: RESETGAMES,
-    };
-  }
-  export function resetGenres() {
-    // el type es lo que se va a ordenar como el genres, games
-    return {
-      type: RESETGENRES,
     };
   }
   /*

@@ -1,7 +1,40 @@
+.danger{
+    color: red;
+}
 .containerForm{
     display: flex;
     justify-content: center;
     margin-top: 5%;
+}
+.forms {
+    display: flex;
+    width: 80%;
+    flex-wrap: wrap;
+    text-align: center;    
+}
+.inputs{
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5%;
+}
+.inputSmalls{
+    background: none;
+    border: none;
+    color: rgb(154, 164, 170);
+    letter-spacing: 1px;
+    font-size: 16px;
+    padding: 16px 60px 16px 50px;
+    border-bottom: 2px solid rgb(71, 115, 140);
+    transition: all 0.2s ease-in-out;
+}
+.inputSmalls:hover {
+    color:antiquewhite;
+    padding-bottom: 12px;
+    border-bottom: 4px solid rgb(71, 115, 140);
+    background-color: #111a279d;
 }
 .imgHeart {
     width: 50px;
@@ -24,10 +57,28 @@ p{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    width: 70%;
+    width: 80%;
+    margin: 2% 10% 0 10%;
 }
 .btnGenreBox{
     margin: 1%;
+}
+.RatingContainer{
+    width: 100%;
+}
+.selectedR {
+    display: flex;
+    justify-content: center;
+}
+.heartsContainer{
+    display: flex;
+    justify-content: center;
+}
+.GenresContainer{
+    margin: 5% 0;
+}
+.heart{
+    margin: 2%;
 }
 .selected{
     background: rgb(154, 164, 170);
@@ -38,6 +89,7 @@ p{
     color: black;
     font-weight: bold;
 }
+
 .noSelected{
     background: none;
     letter-spacing: 2px;
@@ -46,6 +98,33 @@ p{
     border: rgb(71, 115, 140) solid 2px;
     color: aliceblue;
 }
+.PlatformsContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4%;
+}
 .boxPlatf{
-    display: flex
+    display: flex;
+    margin-top: 2%;
+}
+.btnSubmti{
+    width: 100%;
+    margin-bottom: 5%;
+}
+.btnSubmti button{
+    background-color: #111a27;
+    border: none;
+    color: rgb(154, 164, 170);
+    letter-spacing: 1px;
+    font-size: 16px;
+    padding: 16px 60px 16px 50px;
+    border-bottom: 2px solid rgb(71, 115, 140);
+    transition: all 0.2s ease-in-out;
+}
+.btnSubmti button:hover {
+    color:antiquewhite;
+    border-bottom: 4px solid rgb(71, 115, 140);
+    background-color: #111a279d;
 }

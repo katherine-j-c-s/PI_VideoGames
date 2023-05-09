@@ -18,7 +18,7 @@ router.get('/',(req,res)=>{
             {
                 videogames:'/videogames',
                 get:[
-                    {
+                    { 
                         conParams:{
                             idVideogame:"trae o crea el videojuego que el id que le des"
                         }

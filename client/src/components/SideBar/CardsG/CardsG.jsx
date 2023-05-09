@@ -1,4 +1,5 @@
 import axios from 'axios'
+import './CardsG.css'
 import React, { useEffect, useState } from 'react'
 import {BsArrowDownRightCircleFill,BsArrowDownRightCircle} from 'react-icons/bs'
 export default function CardsG({id,name,image,games_count}) {
@@ -21,12 +22,15 @@ export default function CardsG({id,name,image,games_count}) {
         }
     }
     return (
-        <div>
-            <h1>{name}</h1>
+        <div className={show === false ? 'containerGenreC' : 'containerGenreO'}>
             <img src={image} alt={name} />
-            <p>{games_count}</p>
-            <div onClick={showDesc}>
-                {show === false ? <BsArrowDownRightCircleFill/> : <BsArrowDownRightCircle/>}
+            <h1 className='name' >{name}</h1>
+            <div className='countsG'>
+                <p>Games Count:</p>
+                <p>{games_count}</p>
+            </div>
+            <div className='iconsOCBox' onClick={showDesc}>
+                {show === false ? <BsArrowDownRightCircleFill className='iconOC'/> : <BsArrowDownRightCircle className='iconOC'/>}
             </div>
             {show === true ? <p>{description}</p> : null}
         </div>

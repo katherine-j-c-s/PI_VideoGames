@@ -83,9 +83,14 @@ router.get('/:idVideogame', (req,res)=>{
                         releaseDate: validateDate(data.released),
                         rating: validateRate(data.rating),
                         genres: data.genres,
-                        platforms: data.parent_platforms
+                        platforms: data.parent_platforms,
                     }
-                    
+                    let moreDetails ={
+                        image2: data.background_image_additional,
+                        website:data.website,
+                        publishers: data.publishers,
+                        developers: data.developers,
+                    }
                     async function showDetails(id) {
                         await AddOrFindByID(videojuego)
                         let game = await Videogame.findOne({
@@ -95,7 +100,9 @@ router.get('/:idVideogame', (req,res)=>{
                                 {model: ParentPlatform}
                             ]
                         })
-                        res.status(200).json(game)
+                        let details = {...game.dataValues, ...moreDetails}
+                        console.log(details);
+                        res.status(200).json(details)
                     }
                     showDetails(videojuego.id)
                 }
@@ -109,25 +116,25 @@ router.get('/:idVideogame', (req,res)=>{
     }
     
 })
-router.post('/', async(req,res)=>{
+router.post('/', async(req,res)=>{ 
     const {name,image,description,releaseDate,rating,genres,platforms} = req.body
     let max = await Videogame.findAll({
         attributes: [Sequelize.fn('max',Sequelize.col('id'))],
         raw: true,
     })
     let videojuego = {
-        id: ++max[0].max,
+        id: ++max[0].max, 
         name,
         image,
         description,
         releaseDate: validateDate(releaseDate),
         rating: validateRate(rating),
-        genres,
-        platforms
+        genres:genres,
+        platforms:platforms
     }
     await AddOrFindByID(videojuego)
     let game = await Videogame.findOne({
-        where:{id:videojuego.id},
+        where:{name:videojuego.name},
         include: [
             {model: Genre},
             {model: ParentPlatform}

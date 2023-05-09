@@ -30,23 +30,22 @@ function validateRate(rate){
 async function AddOrFindByID(videojuego) {
     let [game,created] = await Videogame.findOrCreate({
         where:{
-            id: videojuego.id
+            name: videojuego.name
         },defaults: {
-            name: videojuego.name,
+            id: videojuego.id,
             image: videojuego.image,
             description: videojuego.description,
             releaseDate: videojuego.releaseDate, 
             rating: videojuego.rating,
         }
     });
+    
     if (created) {
-        console.log("new added");
         let genres= videojuego.genres.map(g=> g.id)
         console.log(genres);
         for (let e = 0; e < genres.length; e++) {
             await game.addGenre(genres)
         }
-
         let platforms = videojuego.platforms.map(p => p.platform.name)
         console.log(platforms);
         for (let e = 0; e < platforms.length; e++) {

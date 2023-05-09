@@ -5,7 +5,7 @@ const {addAllGenres} = require('../controlers/Genre')
 const {Genre} = require('../db')
 require('dotenv').config()
 
-const API_KEY = process.env.MY_API_KEY
+const API_KEY = process.env.MY_API_KEY 
 
 router.get('/', async(req,res)=>{
     try {

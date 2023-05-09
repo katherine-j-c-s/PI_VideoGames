@@ -1,12 +1,16 @@
 import React from 'react'
+import './Platforms.css'
 import { useState} from 'react'
+import { useSelector } from 'react-redux'
 
 import {FaLaptop ,FaAppStoreIos,FaPlaystation,FaXbox} from 'react-icons/fa'
 import {BsAndroid2, BsApple,BsNintendoSwitch} from 'react-icons/bs'
 import {TbWorld} from 'react-icons/tb'
 import {GrArchlinux} from 'react-icons/gr'
 
-export default function Platforms({platforms}) {
+
+export default function Platforms() {
+  const {platforms} = useSelector((state)=>state)
   let [allPlatforms,setAllPlatforms] = useState([
     <FaLaptop/>,
     <FaPlaystation/>,
@@ -20,7 +24,7 @@ export default function Platforms({platforms}) {
   ])
   return (
     <div>
-      <ul>
+      <ul className='platfItems'>
         {platforms &&
           platforms.map(p=>{
               let icon = allPlatforms[p.id - 1]

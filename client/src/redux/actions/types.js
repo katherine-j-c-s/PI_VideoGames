@@ -7,7 +7,6 @@ export const GET_PLATFORMS= "GET_PLATFORMS"
 export const ORDER_RANK = "ORDER_RANK"
 export const ORDER_ALFAB = "ORDER_ALFAB"
 export const RESETGAMES = "RESETGAMES"
-export const RESETGENRES = "RESETGENRES"
 
 export const NEXT_PAGE = "NEXT_PAGE"
 export const PREV_PAGE = "PREV_PAGE"
