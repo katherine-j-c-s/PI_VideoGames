@@ -7,7 +7,8 @@ import {
     ORDER_RANK,
     ORDER_ALFAB,
     RESETGAMES,
-    RESETGENRES,
+    FILTER_GENRES,
+    GET_GAMES_BY_GENRE,
     NEXT_PAGE,
     PREV_PAGE,
     HANDLE_NUMBER
@@ -103,7 +104,18 @@ import {
         }
       };
   }
-
+  // export function getGamesByGenre(show,genre){
+  //   return{
+  //     type:GET_GAMES_BY_GENRE,
+  //     payload:[show,genre]
+  //   }
+  // }
+  export function getGamesByGenre(genre){
+    return{
+      type:FILTER_GENRES,
+      payload:genre
+    }
+  }
   export function orderByRank(order,type) {
     // A: ascendente o D: descendente
     // el type es lo que se va a ordenar como el genres, games

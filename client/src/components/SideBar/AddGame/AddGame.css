@@ -72,13 +72,25 @@ p{
 }
 .heartsContainer{
     display: flex;
+    position: relative;    
     justify-content: center;
 }
 .GenresContainer{
     margin: 5% 0;
 }
 .heart{
+    display: flex;
+    flex-direction: column;
     margin: 2%;
+}
+.heart label {
+    top: 100%;
+    color: rgb(154, 164, 170);
+    font-size: 26px;
+    margin: auto;
+    font-weight: 400;
+    width: max-content;
+    position: absolute;
 }
 .selected{
     background: rgb(154, 164, 170);

@@ -12,11 +12,6 @@ import {GrArchlinux} from 'react-icons/gr'
 
 export default function Card({id,name,image,genres,platforms,releaseDate,rating}) {
     let [showD,setShoeD]= useState()
-
-    let year = releaseDate.toString().slice(0,4)
-    let month = releaseDate.toString().slice(4,6)
-    let day = releaseDate.toString().slice(6,8)
-    let date = day + "/" + month + "/" + year
     
     let rate = rating.toString()[0]
 
@@ -44,6 +39,7 @@ export default function Card({id,name,image,genres,platforms,releaseDate,rating}
                 {platforms &&
                 platforms.map(p=>{
                 let icon = allPlatforms[p.id - 1]
+                console.log(platforms);
                 return(
                     <li className='icon'>{icon}</li>
                 )
@@ -67,7 +63,7 @@ export default function Card({id,name,image,genres,platforms,releaseDate,rating}
                 </div>
                 <div>
                     <p>date:</p>
-                    <p>{date}</p>
+                    <p>{releaseDate}</p>
                 </div>
                 <div>
                     {rate >= 1 ? (<img className='imgHeart' src={imageS} alt="Rating"/>): null}

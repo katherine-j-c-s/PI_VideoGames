@@ -6,12 +6,14 @@ import {
   orderByRank,
   resetGames,
   orderByAlfb,
-  handleNumber
+  handleNumber,
+  getGamesByGenre
 } from '../../redux/actions/actions'
 
 
 export default function Home() {
-  const { games ,gamesOrigin,numPage} = useSelector((state) => state);
+  const { games ,numPage, genres} = useSelector((state) => state);
+
   const dispatch = useDispatch()
   function handleOrderRank(e) {
     const { name } = e.target;
@@ -22,9 +24,14 @@ export default function Home() {
     dispatch(orderByAlfb())
     dispatch(handleNumber(1))
   }
-  function resetBtton() {
+  function resetBtton() {  
     dispatch(resetGames());
     dispatch(handleNumber(1))
+  }
+  function handleFilterGamesByGenre(event) {
+    event.preventDefault();
+    dispatch(getGamesByGenre(event.target.value));
+    console.log(games);
   }
   return (
     <div className='home'>
@@ -34,8 +41,22 @@ export default function Home() {
           <button className='btns' onClick={handleOrderRank} name='Lowest'>Lowest Rank</button>
           <button className='btns' onClick={handleOrderAlf} name='alphabetical order'>alphabetical order</button>
           <button className='btns' onClick={resetBtton} name='Reset'>reset</button>
+          <select
+              defaultValue={"sinFiltro"}
+              onChange={(event) => handleFilterGamesByGenre(event)}
+            >
+            <option value="sinFiltro">Genres</option>
+              Genres :{" "}
+              {genres?.map((g, i) => {
+                return (
+                  <option value={g.name} key={i}>
+                    {" "}
+                    {g.name}{" "}
+                  </option>
+                );
+              })}
+            </select>
         </div>
-        
         <Cards className='containerCards' games={games} numPage={numPage}></Cards>
     </div>
   )

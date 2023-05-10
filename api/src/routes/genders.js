@@ -9,15 +9,24 @@ const API_KEY = process.env.MY_API_KEY
 
 router.get('/', async(req,res)=>{
     try {
-        // axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}&dates=2019-09-01,2019-09-30&platforms=18,1,7`)
-        // .then(({data})=>{
-        //     if (data) {
-        //         let added = addAllGenres(data.results) 
-        //     }
-        // })
-        const data = await Genre.findAll()
-        let genres = data.map(g=> g.dataValues)
-        res.status(200).json(genres)
+        const { nameGenre } = req.query
+        if(nameGenre){ 
+            let videogames = await axios.get("http://localhost:3001/videogames")
+            let includes = videogames.data.map(g=>{
+                function findGames(name) {
+                    let include = g.genres.find((g)=>g.name === name)
+                    return include
+                }
+                let results = findGames(nameGenre)
+                console.log(results);
+            })
+            console.log(includes);
+            res.status(200).json(includes)
+        }else{
+            const data = await Genre.findAll()
+            let genres = data.map(g=> g.dataValues)
+            res.status(200).json(genres)
+        }
     } catch (error) {
         console.log("----->",error);
     }

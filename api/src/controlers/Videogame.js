@@ -15,7 +15,7 @@ function validateName(name){
                 return e
             }
         }
-    });
+    }); 
     const result = nameFixed.join("")
     return result
 }
@@ -26,6 +26,21 @@ function validateDate(date){
 function validateRate(rate){
     const result = rate.toString().split(".").join("")
     return Number(result)
+}
+function cleanArray(array) {
+    let games = array.map((v)=>{
+        let videojuego = { 
+            id: v.id, 
+            name: v.name,
+            image: v.background_image,
+            releaseDate: validateDate(v.released),
+            rating: validateRate(v.rating),
+            genres: v.genres,
+            platforms: v.parent_platforms
+        }
+        return videojuego
+    })
+    return games
 }
 async function AddOrFindByID(videojuego) {
     let [game,created] = await Videogame.findOrCreate({
@@ -101,7 +116,8 @@ module.exports = {
     validateRate,
     validateDate,
     AddOrFindByID,
-    save
+    cleanArray,
+    save,
 }
 
 //USE ESTAS FUNCIONES PARA :

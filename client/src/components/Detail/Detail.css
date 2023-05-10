@@ -1,0 +1,56 @@
+.containerDetails{
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+}
+.leftSide{
+    display: flex;
+    width: 60%;
+    flex-direction: column;
+    margin: 0% 0% 2%;
+}
+.ritghSide{
+    display: flex;
+    flex-direction: column;
+    background-color: #111a27;
+    margin: 10% 0% 2%;
+    width: 30%;
+}
+.position{
+    position: absolute;
+    display: flex;
+    align-self: flex-start;
+    margin: 0% 0% 2%;
+}
+.carruselBox{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15% 0 0 5%;
+}
+.carrusel{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.carruselBox img {
+    width: 800px;
+    height: 400px;
+}
+.carruselPosition{
+    display: flex;
+}
+.textContent{
+    width: 80% ;
+    margin: 2% 0 2% 15%;
+}
+.textContent p{
+    font-size: 18px;
+}
+.titleG{
+    color: aliceblue;
+}

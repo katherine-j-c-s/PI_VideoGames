@@ -211,7 +211,7 @@ export default function AddGame() {
             <p>How Much Do You Rate Your Game?</p>
             <div className='heartsContainer'>
                 <div className='heart'>
-                    {inputs.rating === '' || inputs.rating < 1 ? (<img 
+                    {inputs.rating === '' || inputs.rating < 111 ? (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
                         src={imageN} 
@@ -219,7 +219,7 @@ export default function AddGame() {
                         name='111' 
                     />) : null
                     }
-                    {inputs.rating >= 1 && inputs.rating !== '' ? 
+                    {inputs.rating >= 111 && inputs.rating !== '' ? 
                         (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
@@ -228,12 +228,12 @@ export default function AddGame() {
                         name='111'  
                     />)
                     : null}
-                    {inputs.rating === "1"?  
+                    {inputs.rating === "111"?  
                         (<label>Not Good At All</label>)
                     : null}
                 </div>
                 <div className='heart'>
-                    {inputs.rating === '' || inputs.rating < 2 ? (<img 
+                    {inputs.rating === '' || inputs.rating < 222 ? (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
                         src={imageN} 
@@ -241,7 +241,7 @@ export default function AddGame() {
                         name='222' 
                     />) : null
                     }
-                    {inputs.rating >= 2 && inputs.rating !== '' ? 
+                    {inputs.rating >= 222 && inputs.rating !== '' ? 
                         (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
@@ -250,12 +250,12 @@ export default function AddGame() {
                         name='222' 
                     />)
                     : null}
-                    {inputs.rating === "2"?  
+                    {inputs.rating === "222"?  
                         (<label>Not So bad</label>)
                     : null}
                 </div>
                 <div className='heart'>
-                    {inputs.rating === '' || inputs.rating < 3 ? (<img 
+                    {inputs.rating === '' || inputs.rating < 333 ? (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
                         src={imageN} 
@@ -263,7 +263,7 @@ export default function AddGame() {
                         name='333' 
                     />) : null
                     }
-                    {inputs.rating >= 3 && inputs.rating !== '' ? 
+                    {inputs.rating >= 333 && inputs.rating !== '' ? 
                         (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
@@ -272,12 +272,12 @@ export default function AddGame() {
                         name='333' 
                     />)
                     : null}
-                    {inputs.rating === "3" ? 
+                    {inputs.rating === "333" ? 
                         (<label>It's nice</label>)
                     : null}
                 </div>
                 <div className='heart'>
-                    {inputs.rating === '' || inputs.rating < 4 ? (<img 
+                    {inputs.rating === '' || inputs.rating < 444 ? (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
                         src={imageN} 
@@ -285,7 +285,7 @@ export default function AddGame() {
                         name='444' 
                     />) : null
                     }
-                    {inputs.rating >= 4 && inputs.rating !== '' ? 
+                    {inputs.rating >= 444 && inputs.rating !== '' ? 
                         (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
@@ -294,12 +294,12 @@ export default function AddGame() {
                         name='444' 
                     />)
                     : null}
-                    {inputs.rating === "4" ? 
+                    {inputs.rating === "444" ? 
                         (<label>It's Amazing</label>)
                     : null}
                 </div>
                 <div className='heart'>
-                    {inputs.rating === '' || inputs.rating < 5 ? (<img 
+                    {inputs.rating === '' || inputs.rating < 555 ? (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
                         src={imageN} 
@@ -307,7 +307,7 @@ export default function AddGame() {
                         name='555' 
                     />) : null
                     }
-                    {inputs.rating >= 5 && inputs.rating !== '' ? 
+                    {inputs.rating >= 555 && inputs.rating !== '' ? 
                         (<img 
                         className='imgHeart' 
                         onClick={handleRating} 
@@ -316,10 +316,11 @@ export default function AddGame() {
                         name='555' 
                     />)
                     : null}
-                    {inputs.rating === "5" ?
+                    {inputs.rating === "555" ?
                         (<label>The Best Game Ever</label>)
                     : null}
                 </div>
+                
             </div>
             {showError === true  ?  
                 <p className='danger'>{errors.rating}</p>

@@ -11,7 +11,7 @@ export default function Cards({games,numPage}) {
   let cantPages = Math.floor(games.length / 8);
 
   let viewGames = games?.slice(desde, hasta);
-
+  
   return (
     <div className='container'>
       <div className='cardsContainer'>

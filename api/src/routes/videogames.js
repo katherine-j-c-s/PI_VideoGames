@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router()
-const axios = require('axios')
+const router = express.Router() 
+const axios = require('axios')  
 const { 
     validateName,
-    validateDate, 
-    validateRate, 
+    validateDate,  
+    validateRate,  
     AddOrFindByID,
+    cleanArray,
     save
 } = require('../controlers/Videogame')
 const {Videogame,ParentPlatform,Genre,Sequelize} = require('../db')
@@ -18,6 +19,14 @@ router.get('/', async(req,res)=>{
     try {
         const { search } = req.query
         if(search){
+            const dbVideogames = await Videogame.findAll();
+            
+            let findGameDB = dbVideogames.map(v=> { 
+                let game = v.name.slice(0,search.length)
+                if (game === search) {
+                    return v
+                }
+            })
             axios.get(`https://api.rawg.io/api/games?search=${search}&key=${API_KEY}`)
             .then(({data})=>{
                 if (data) {
@@ -27,41 +36,42 @@ router.get('/', async(req,res)=>{
                             name: v.name,
                             image: v.background_image,
                             description: v.description,
-                            releaseDate: validateDate(v.released),
-                            rating: validateRate(v.rating),
+                            releaseDate: v.released,
+                            rating: v.rating, 
                             genres: v.genres,
                             platforms: v.parent_platforms
                         }
                         return videojuego
                     })
-                    res.status(200).json(games)
+                    if (findGameDB[0] !== undefined) {
+                        res.status(200).json([...findGameDB,...games])
+                    }else{
+                        res.status(200).json(games)
+                    }
                 }
             }).catch((error)=> res.status(200).json({ message: "not found:" + error}))
         } else {
-            // axios.get(`https://api.rawg.io/api/games?key=f8ed5decf7b547b193d7895b9c21716c`)
-            // .then(({data})=>{
-            //     if (data) {
-            //         let games = data.results.map((v)=>{
-            //             let videojuego = {
-            //                 id: v.id,
-            //                 name: v.name,
-            //                 image: v.background_image,
-            //                 description: v.description,
-            //                 releaseDate: validateDate(v.released),
-            //                 rating: validateRate(v.rating),
-            //                 genres: v.genres,
-            //                 platforms: v.parent_platforms
-            //             }
-            //             return videojuego
-            //         })
-            //         save(games)
-            //     }
-            // }).catch((error)=> console.log("not found: ", error))
-            const data = await Videogame.findAll({
-                include: [{model: ParentPlatform},{model: Genre}]
-            })
-            let allGames = data.map(v=>v.dataValues)
-            res.status(200).json(allGames)
+            const getallvideogames = async () => {
+                const URL = "https://api.rawg.io/api/games";
+                const dbVideogamesRaw = await Videogame.findAll({
+                  include: {
+                    model: Genre,
+                    attributes: ["name"],
+                    through: {
+                      attributes: [],
+                    },
+                  },
+                });
+                const apiVideogames = [];
+                for (let i = 1; i < 6; i++) {
+                  const response = await axios.get(`${URL}?key=${API_KEY}&page=${i}`);
+                  const apiVideogamesRaw = response.data.results;
+                  apiVideogames.push(...apiVideogamesRaw);
+                }
+                const cleanApiVideogames = cleanArray(apiVideogames);
+                res.status(200).json([...cleanApiVideogames,...dbVideogamesRaw])
+            };
+            getallvideogames()
         }
     }catch (error) {
         console.log(error + "=====> not found");
@@ -79,7 +89,7 @@ router.get('/:idVideogame', (req,res)=>{
                         id: data.id,
                         name: data.name,
                         image: data.background_image,
-                        description: data.description,
+                        description: data.description_raw,
                         releaseDate: validateDate(data.released),
                         rating: validateRate(data.rating),
                         genres: data.genres,
