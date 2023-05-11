@@ -1,7 +1,7 @@
 import React from 'react'
 import './Paginate.css'
 import { useDispatch, useSelector } from 'react-redux'
-import {nextPage,prevPage,handleNumber} from '../../redux/actions/actions'
+import {nextPage,prevPage} from '../../redux/actions/actions'
 
 export default function Paginate({ cantPages }) {
 
@@ -12,9 +12,6 @@ export default function Paginate({ cantPages }) {
   }
   function prev() {
     dispatch(prevPage());
-  }
-  function number(n) {
-    dispatch(handleNumber(n));
   }
   return (
     <div className='paginate'>

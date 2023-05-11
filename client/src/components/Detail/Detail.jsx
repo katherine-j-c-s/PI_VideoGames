@@ -3,7 +3,6 @@ import './Detail.css'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 
-import {IoIosArrowBack,IoIosArrowForward} from 'react-icons/io'
 import {FaLaptop ,FaAppStoreIos,FaPlaystation,FaXbox} from 'react-icons/fa'
 import {BsAndroid2, BsApple,BsNintendoSwitch} from 'react-icons/bs'
 import {TbWorld,TbPointFilled,TbPoint} from 'react-icons/tb'
@@ -39,9 +38,9 @@ export default function Detail() {
             } catch (error) {
               console.log("game update in useeffect in component Detail", error);
             }
-          }
-          inEffect();
-          return setGame({});
+        }
+        inEffect();
+        return setGame({});
     },[id])
     function handleCarusel(){
         if (carrusel.first) {
@@ -70,68 +69,80 @@ export default function Detail() {
                     </div>
                 </div>
                 <div className='carruselPosition'>
-                    {carrusel.first === true || carrusel.second === true ?  <TbPointFilled onClick={handleCarusel}/>:null}
+                    {carrusel.first === true ?  <p onClick={handleCarusel}><TbPointFilled/></p> :null}
+                    {carrusel.second === true ?  <p onClick={handleCarusel}><TbPoint/></p> :null}
 
-                    {carrusel.second === true ?  <TbPointFilled onClick={handleCarusel}/>:null}
-                    {carrusel.first === true ? <TbPoint onClick={handleCarusel}/>:null}
+                    {carrusel.second === true ? <p onClick={handleCarusel}><TbPointFilled/></p> :null}
+                    {carrusel.first === true ? <p onClick={handleCarusel}><TbPoint/></p> :null}
                 </div>
             </div>
             <div className='textContent'>
+                <ul className='platfiIcons'>
+                    {game.platforms &&
+                        game.platforms.map(p=>{
+                            let icon = allPlatforms[p.platform.id - 1]
+                            return(
+                            <li key={p.id}>{icon}</li>
+                            )
+                        })
+                    }
+                </ul>
                 <h1 className='titleG'>{game.name}</h1>
                 <p>{game.description}</p>
             </div> 
         </div>
         <div className='ritghSide'>
-            <div>
-                <ul>
-                    {game.ParentPlatforms &&
-                        game.ParentPlatforms.map(p=>{
-                            let icon = allPlatforms[p.id - 1]
-                            return(
-                            <li>{icon}</li>
-                            )
-                        })
-                    }
+            <div className='infoDetails'>
+                <p>Platforms:</p>
+                <ul className='ulNames'>
+                {game.platforms &&
+                    game.platforms.map(p=>{
+                        return(
+                        <li className='liText' key={p.id}>{p.platform.name}</li>
+                        )
+                    })
+                }
                 </ul>
-                <ul>
-                    {game.Genres &&
-                        game.Genres.map(p=>{
+            </div>
+            <div className='infoDetails'>
+                <p>Genres:</p>
+                <ul className='ulNames'>
+                    {game.genres &&
+                        game.genres.map(g=>{
                             return(
-                            <li>{p.name}</li>
+                            <li className='liText' key={g.id}>{g.name}</li>
                             )
                         })
                     }
                 </ul>
             </div>
-            <div>
-                <div>
-                    <p>Date Released:</p>
-                    <p>{game.releaseDate}</p>
-                </div>
-                <div>
-                    <p>Rating:</p>
-                    <p>{game.rating}</p>
-                </div>
-                <div>
-                    <p>Website:</p>
-                    <a href={game.website}>{game.website}</a>
-                </div>
-                <div>
-                    <p>Publishers:</p>
-                    <ul>
-                        {game.publishers && game.publishers.map(p=>{
-                            return(<li>{p.name}</li>)
-                        })}
-                    </ul>
-                </div>
-                <div>
-                    <p>Developers:</p>
-                    <ul>
-                        {game.developers && game.developers.map(d=>{
-                            return(<li>{d.name}</li>)
-                        })}
-                    </ul>
-                </div>
+            <div className='infoDetails'>
+                <p>Date Released:</p>
+                <p>{game.releaseDate}</p>
+            </div>
+            <div className='infoDetails'>
+                <p>Rating:</p>
+                <p>{game.rating}</p>
+            </div>
+            <div className='infoDetails'>
+                <p>Website:</p>
+                <a href={game.website}>{game.website}</a>
+            </div>
+            <div className='infoDetails'>
+                <p>Publishers:</p>
+                <ul className='ulNames'>
+                    {game.publishers && game.publishers.map(p=>{
+                        return(<li className='liText' key={p.id}>{p.name}</li>)
+                    })}
+                </ul>
+            </div>
+            <div className='infoDetails'>
+                <p>Developers:</p>
+                <ul className='ulNames'>
+                    {game.developers && game.developers.map(d=>{
+                        return(<li className='liText' key={d.id}>{d.name}</li>)
+                    })}
+                </ul>
             </div>
         </div>
     </div>

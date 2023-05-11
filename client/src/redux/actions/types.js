@@ -2,7 +2,6 @@ export const ADD_GAME= "ADD_GAME"
 
 export const GET_GAMES= "GET_GAMES"
 export const GET_GENRES= "GET_GENRES"
-export const GET_GAMES_BY_GENRE= "GET_GAMES_BY_GENRE"
 export const GET_PLATFORMS= "GET_PLATFORMS"
 
 export const ORDER_RANK = "ORDER_RANK"

@@ -1,24 +1,26 @@
+const axios = require('axios');
 const {Genre} = require('../db')
+require('dotenv').config()
 
-function addAllGenres(genres) {
-    let allGenres = genres.map((g)=>{
-        let genre = {
-            id: g.id,
-            name: g.name,
-            image: g.image_background, 
-            games_count: g.games_count
+async function getGenres(req,res){
+    try {
+        const data = await Genre.findAll()
+        let genres = data.map(g=> g.dataValues)
+        res.status(200).json(genres)
+    } catch (error) {
+        console.log("api/src/controlers/Genres/getGenres:",error);
+    }
+}
+async function getGenreDescription(req,res){
+    const {id} = req.params
+    try {
+        if(id){
+            let detailsGenre = await axios.get(`https://api.rawg.io/api/genres/${id}?key=f8ed5decf7b547b193d7895b9c21716c`)
+            res.status(200).json(detailsGenre.data)
         }
-        addGenre(genre)
-    })
+    } catch (error) {
+        console.log("api/src/controlers/Genres/getGenreDescription:",error);
+    }
 }
-async function addGenre(obj) {
-    let genre = await Genre.create(obj)
-    return genre.dataValues
-}
-module.exports = {addAllGenres}
+module.exports = {getGenres,getGenreDescription}
 //////////////FUNCIONES CON LAS CUALES CREE LA DB DE GENRES
-
-
-////////AGREGE EN EL SERVIDOR ESTOS COMANDOS PARA QUE ME PASARA EL ARRAY CON TODA LA INFO NECESITADA//////////////
-
-

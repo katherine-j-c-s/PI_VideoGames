@@ -1,8 +1,9 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import './Home.css'
 import { useDispatch, useSelector } from 'react-redux'
 import Cards from '../Cards/Cards'
 import {
+  getGames,
   orderByRank,
   resetGames,
   orderByAlfb,
@@ -15,9 +16,12 @@ export default function Home() {
   const { games ,numPage, genres} = useSelector((state) => state);
 
   const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(getGames())
+  },[])
   function handleOrderRank(e) {
     const { name } = e.target;
-    dispatch(orderByRank(name,"games"))
+    dispatch(orderByRank(name))
     dispatch(handleNumber(1))
   }
   function handleOrderAlf() {
@@ -31,31 +35,25 @@ export default function Home() {
   function handleFilterGamesByGenre(event) {
     event.preventDefault();
     dispatch(getGamesByGenre(event.target.value));
-    console.log(games);
+    dispatch(handleNumber(1))
   }
   return (
     <div className='home'>
       <h1 className='title'>Games You Might Like</h1>
+      {console.log(games)}
         <div className='btnsBox'>
           <button className='btns' onClick={handleOrderRank} name='Highest'>Highest Rank</button>
           <button className='btns' onClick={handleOrderRank} name='Lowest'>Lowest Rank</button>
           <button className='btns' onClick={handleOrderAlf} name='alphabetical order'>alphabetical order</button>
           <button className='btns' onClick={resetBtton} name='Reset'>reset</button>
-          <select
-              defaultValue={"sinFiltro"}
-              onChange={(event) => handleFilterGamesByGenre(event)}
-            >
+          <select className='btns' defaultValue={"sinFiltro"} onChange={(event) => handleFilterGamesByGenre(event)}>
             <option value="sinFiltro">Genres</option>
-              Genres :{" "}
               {genres?.map((g, i) => {
                 return (
-                  <option value={g.name} key={i}>
-                    {" "}
-                    {g.name}{" "}
-                  </option>
+                  <option className='btnsGenres' value={g.name} key={i}>{g.name}</option>
                 );
               })}
-            </select>
+          </select>
         </div>
         <Cards className='containerCards' games={games} numPage={numPage}></Cards>
     </div>

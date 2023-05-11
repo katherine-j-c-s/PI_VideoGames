@@ -11,7 +11,7 @@ import {GrArchlinux} from 'react-icons/gr'
 
 export default function Platforms() {
   const {platforms} = useSelector((state)=>state)
-  let [allPlatforms,setAllPlatforms] = useState([
+  let [allPlatforms] = useState([
     <FaLaptop/>,
     <FaPlaystation/>,
     <FaXbox/>,
@@ -29,7 +29,7 @@ export default function Platforms() {
           platforms.map(p=>{
               let icon = allPlatforms[p.id - 1]
               return(
-              <li>{icon} {p.name} </li>
+              <li className='platfLi' key={p.id}>{icon}__{p.name}</li>
               )
           })
         }

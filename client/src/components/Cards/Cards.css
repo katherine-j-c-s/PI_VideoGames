@@ -5,6 +5,7 @@
 }
 .cardsContainer{
     display: flex;
+    align-items: self-start;
     flex-wrap: wrap;
     justify-content: space-around;
 }

@@ -1,17 +1,27 @@
 .containerGenreC{
     width: 28%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     margin: 1%;
+    background-color: #111a279d;
+    border-radius: 20px;
+    transition: all 0.2s ease-in-out;
 }
 .containerGenreO{
     width: 35%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
+    background-color: #111a279d;
+    border-radius: 20px;
     margin: 1%;
+    transition: all 0.2s ease-in-out;
 }
 .countsG{
     display: flex;
+    width: 90%;
+    margin: 5%;
     justify-content: space-between;
 }
 .iconsOCBox{
@@ -20,8 +30,17 @@
     width: 100%;
 }
 .iconOC{
-    width: 20%;
+    height: 25px;
+    width: 25px;
+    margin: -5% 5% 5% 0;
     display: flex;
-    
+    color: aliceblue;
+}
+.imgG{
+    border-radius: 20px 20px 0 0;
+}
+.nameGCard{
+    font-size: 32px;
+    margin: 3% 0 -2% 5%;
     color: aliceblue;
 }

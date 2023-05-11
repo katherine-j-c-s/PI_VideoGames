@@ -19,14 +19,15 @@ export default function Cards({games,numPage}) {
           viewGames.map((v)=>{
             return(
               <Card
+                className='cardSearchedGame'
                 key={v.id}
                 id={v.id}
                 name={v.name}
                 image={v.image}
-                genres={v.Genres}
+                genres={v.genres}
                 rating={v.rating}
                 releaseDate={v.releaseDate}
-                platforms={v.ParentPlatforms}
+                platforms={v.platforms}
               />
             )
           })

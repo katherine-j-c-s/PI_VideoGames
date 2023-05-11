@@ -7,16 +7,18 @@
 }
 .leftSide{
     display: flex;
-    width: 60%;
+    width: 70%;
     flex-direction: column;
     margin: 0% 0% 2%;
 }
 .ritghSide{
     display: flex;
     flex-direction: column;
-    background-color: #111a27;
-    margin: 10% 0% 2%;
+    background-color: #111a274a;
+    margin: 9% 8% 2% 0;
+    padding: 1% 2%;
     width: 30%;
+    border-radius: 5px;
 }
 .position{
     position: absolute;
@@ -29,7 +31,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15% 0 0 5%;
+    margin-top: 10%;
 }
 .carrusel{
     width: 100%;
@@ -46,11 +48,47 @@
 }
 .textContent{
     width: 80% ;
-    margin: 2% 0 2% 15%;
+    margin: -2% 0 2% 10%;
+}
+.platfiIcons{
+    display: flex;
+    color: aliceblue;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.platfiIcons li{
+    margin-right: 2%;
 }
 .textContent p{
     font-size: 18px;
 }
 .titleG{
     color: aliceblue;
+}
+.infoDetails{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 2px solid #182434d1;
+    transition: all 0.2s ease-in-out;
+}
+.infoDetails a {
+    color: rgb(154, 164, 170);
+}
+.ulNames{
+    list-style: none;
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+}
+.liText {
+    color: rgb(154, 164, 170);
+    margin-left: 5%;
+}
+.infoDetails:hover {
+    width: 95%;
+    padding: 5%;
+    margin: -2%
 }

@@ -22,6 +22,9 @@ export default function SideBar() {
         <Link className='textSideBar' to={'/addGame'}>
           <p>Add Game</p>
         </Link>
+        <Link className='textSideBar' to={'/gamesCreated'}>
+          <p>Games Created</p>
+        </Link>
         <div className='textSideBar' onClick={showPlatforms}>
           <p>Platforms</p>
         </div>

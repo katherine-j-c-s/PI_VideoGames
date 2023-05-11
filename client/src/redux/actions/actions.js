@@ -6,9 +6,8 @@ import {
     SEARCH_GAME,
     ORDER_RANK,
     ORDER_ALFAB,
-    RESETGAMES,
     FILTER_GENRES,
-    GET_GAMES_BY_GENRE,
+    RESETGAMES,
     NEXT_PAGE,
     PREV_PAGE,
     HANDLE_NUMBER
@@ -104,44 +103,27 @@ import {
         }
       };
   }
-  // export function getGamesByGenre(show,genre){
-  //   return{
-  //     type:GET_GAMES_BY_GENRE,
-  //     payload:[show,genre]
-  //   }
-  // }
   export function getGamesByGenre(genre){
     return{
       type:FILTER_GENRES,
       payload:genre
     }
   }
-  export function orderByRank(order,type) {
-    // A: ascendente o D: descendente
-    // el type es lo que se va a ordenar como el genres, games
+  export function orderByRank(order) {
+    // order puede de Acendente y Descendente
+    // Ascendente:Lowest o Descendente:Highest
     return {
       type: ORDER_RANK,
-      payload: [order,type],
+      payload: order,
     };
   }
   export function orderByAlfb() {
-    // A: ascendente o D: descendente
-    // el type es lo que se va a ordenar como el genres, games
     return {
       type: ORDER_ALFAB,
     };
   }
   export function resetGames() {
-    // el type es lo que se va a ordenar como el genres, games
     return {
       type: RESETGAMES,
     };
   }
-  /*
-    filterCards: esta función recibe por parámetro un gender. 
-    Debe retornar una action con el type igual a "FILTER" y el payload será igual al parámetro recibido.
-  
-  orderCards: esta función recibe por parámetro un orden (será: A: ascendente o D: descendente). 
-  Debe retornar una action con el type igual a "ORDER" y el payload será igual al parámetro recibido.
-    */
-  

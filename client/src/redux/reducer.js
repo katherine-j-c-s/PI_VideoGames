@@ -10,7 +10,6 @@ import {
     NEXT_PAGE,
     PREV_PAGE,
     FILTER_GENRES,
-    GET_GAMES_BY_GENRE,
     HANDLE_NUMBER
   } from "./actions/types";
 
@@ -48,24 +47,6 @@ import {
           ...state,
           games: payload === "sinFiltro" ? allGames : filterGame,
         };
-      // case GET_GAMES_BY_GENRE:
-      //   const allGames = state.gamesOrigin;
-
-      //   const filterGame = allGames.filter((elem)=> {
-      //     if (elem.genres) {
-      //       const genres = elem.genres;
-      //       let genero= payload[1]
-      //       let result = genres.includes(genero)
-      //       console.log(result);
-      //       return genres.includes(genero);
-      //     }
-      //     return false;
-      //   });
-      //   return {
-      //     ...state,
-      //     showGamesByGenre: payload[0],
-      //     games: filterGame,
-      //   };
       case SEARCH_GAME:
         return {
           ...state,
@@ -109,22 +90,19 @@ import {
           games: altern
         };
       case ORDER_RANK:
-        if (payload[1] ==="games") {
-          const newOrder = state.games.sort((a, b) => {
-            if (a.rating > b.rating) {
-              return "Lowest" === payload[0] ? 1 : -1;
-            }
-            if (a.rating < b.rating) {
-              return "Highest" === payload[0] ? 1 : -1;
-            }
-            return 0;
-          });
-          return {
-            ...state,
-            games: newOrder,
-          };
-        }
-        break
+        const newOrderRank = state.games.sort((a, b) => {
+          if (a.rating > b.rating) {
+            return "Lowest" === payload ? 1 : -1;
+          }
+          if (a.rating < b.rating) {
+            return "Highest" === payload ? 1 : -1;
+          }
+          return 0;
+        });
+        return {
+          ...state,
+          games: newOrderRank,
+        };
       case ORDER_ALFAB:
         const newOrder = state.games.sort((a, b) =>
         a.name.localeCompare(b.name));

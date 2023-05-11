@@ -1,28 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import CardsG from '../CardsG/CardsG'
-import Cards from '../../Cards/Cards'
-import { useDispatch, useSelector } from 'react-redux'
-import {getGamesByGenre} from '../../../redux/actions/actions'
+import {useSelector } from 'react-redux'
 import './Genre.css'
 
 export default function Genders() {
-  let {genres, gamesByGenre ,numPage,showGamesByGenre} = useSelector((state)=>state)
-  let [showGamesG,setShowGamesG] = useState()
-  const dispatch = useDispatch()
-  useEffect(()=>{
-    setShowGamesG(showGamesByGenre);
-  },[showGamesByGenre])
-  function goBack() {
-    dispatch(getGamesByGenre(false,"Action"))
-  }
+  let {genres} = useSelector((state)=>state)
   return (
     <div className='alingGenres'>
-        {showGamesG === true ? 
-        <p onClick={goBack}>back</p>
-        :null}
         <h1 className='title'>This are the Genres</h1>
-        {showGamesG === false ?
-          <div className='containerCardsG'>
+        <div className='containerCardsG'>
           {genres &&
             genres.map(g=>{
               return(
@@ -36,10 +22,7 @@ export default function Genders() {
               )
             })
           }
-        </div>:null}
-        {showGamesG === true ? 
-        <p>in games</p>
-        :null}
+        </div>
     </div>
   )
 }

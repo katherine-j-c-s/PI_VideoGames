@@ -16,9 +16,6 @@ module.exports = (sequelize) => {
     },
     image: {
       type: DataTypes.STRING,
-      // validate: {
-      //   isUrl: true
-      // }
     },
     description: {
       type: DataTypes.STRING(10000),
