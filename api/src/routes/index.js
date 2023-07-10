@@ -8,7 +8,7 @@ const platforms = require('./platforms')
 // Ejemplo: const authRouter = require('./auth.js');
 
 router.use('/videogames',videogames)
-router.use('/platforms',platforms)
+router.use('/platforms',platforms) 
 router.use('/genres',genders)
 
 router.get('/',(req,res)=>{

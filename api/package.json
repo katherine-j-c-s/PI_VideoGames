@@ -1,7 +1,6 @@
 {
-  "name": "api",
+  "name": "vercel",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -31,5 +30,16 @@
     "nodemon": "^2.0.22",
     "supertest": "^6.0.1",
     "supertest-session": "^4.1.0"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/katherine-j-c-s/PI_VideoGames"
+  },
+  "keywords": [
+    "hjsr1311"
+  ],
+  "description": "videogame_page"
 }
