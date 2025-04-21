@@ -4,7 +4,7 @@ const {Op} = require('sequelize')
 
 require('dotenv').config()
 
-const API_KEY = 2c943d87ab6a45c5939d6a582f7aed98
+//const API_KEY = 2c943d87ab6a45c5939d6a582f7aed98
 
 function validateDate(date){
     const result = date.split("-").join("")
@@ -27,7 +27,7 @@ async function getGamesOrSearchGames(req,res){
                     return v
                 }
             })
-            axios.get(`https://api.rawg.io/api/games?search=${search}&key=${API_KEY}`)
+            axios.get(`https://api.rawg.io/api/games?search=${search}&key=2c943d87ab6a45c5939d6a582f7aed98`)
             .then(({data})=>{
                 if (data) {
                     let games = data.results.map((v)=>{
@@ -64,7 +64,7 @@ async function getGamesOrSearchGames(req,res){
                 });
                 const apiVideogames = [];
                 for (let i = 1; i < 6; i++) {
-                  const response = await axios.get(`${URL}?key=${API_KEY}&page=${i}`).catch((error)=> res.status(200).json("api/src/controlers/Videogames/getGamesOrSearchGames/getAll:" + error));
+                  const response = await axios.get(`${URL}?key=2c943d87ab6a45c5939d6a582f7aed98&page=${i}`).catch((error)=> res.status(200).json("api/src/controlers/Videogames/getGamesOrSearchGames/getAll:" + error));
                   const apiVideogamesRaw = response.data.results;
                   apiVideogames.push(...apiVideogamesRaw);
                 }
@@ -101,7 +101,7 @@ async function getDetail(req,res){
             res.status(200).json(gameDB)
         }
         if (!gameDB) {
-            axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`)
+            axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=2c943d87ab6a45c5939d6a582f7aed98`)
             .then(({data})=>{
                 if (data) {
                     let details = {
