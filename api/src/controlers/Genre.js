@@ -15,7 +15,7 @@ async function getGenreDescription(req,res){
     const {id} = req.params
     try {
         if(id){
-            let detailsGenre = await axios.get(`https://api.rawg.io/api/genres/${id}?key=f8ed5decf7b547b193d7895b9c21716c`)
+            let detailsGenre = await axios.get(`https://api.rawg.io/api/genres/${id}?key=2c943d87ab6a45c5939d6a582f7aed98`)
             res.status(200).json(detailsGenre.data)
         }
     } catch (error) {
