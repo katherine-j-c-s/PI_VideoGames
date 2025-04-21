@@ -4,7 +4,7 @@ const {Op} = require('sequelize')
 
 require('dotenv').config()
 
-const API_KEY = process.env.MY_API_KEY
+const API_KEY = 2c943d87ab6a45c5939d6a582f7aed98
 
 function validateDate(date){
     const result = date.split("-").join("")
